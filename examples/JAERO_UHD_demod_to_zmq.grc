@@ -50,7 +50,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [112, 596.0]
+    coordinate: [112, 620.0]
     rotation: 0
     state: enabled
 - name: audio_lpf
@@ -71,7 +71,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [288, 796.0]
+    coordinate: [288, 820.0]
     rotation: 0
     state: true
 - name: audio_rate
@@ -104,7 +104,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 796.0]
+    coordinate: [736, 820.0]
     rotation: 0
     state: true
 - name: dec0
@@ -250,7 +250,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [584, 796.0]
+    coordinate: [584, 820.0]
     rotation: 0
     state: true
 - name: lpf_gain
@@ -271,7 +271,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 796.0]
+    coordinate: [408, 820.0]
     rotation: 0
     state: true
 - name: nphases
@@ -369,7 +369,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [104, 796.0]
+    coordinate: [104, 820.0]
     rotation: 0
     state: true
 - name: taps
@@ -408,7 +408,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [368, 580.0]
+    coordinate: [368, 604.0]
     rotation: 0
     state: true
 - name: JAERO_zmq_sink_0
@@ -424,7 +424,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 580.0]
+    coordinate: [720, 604.0]
     rotation: 0
     state: true
 - name: blocks_complex_to_float_0
@@ -829,7 +829,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 468.0]
+    coordinate: [720, 492.0]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0_1_0_0
@@ -991,7 +991,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 676.0]
+    coordinate: [720, 700.0]
     rotation: 0
     state: true
 - name: uhd_usrp_source_0
@@ -1466,7 +1466,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [112, 532.0]
+    coordinate: [112, 556.0]
     rotation: 0
     state: enabled
 - name: virtual_source_0_0
@@ -1479,7 +1479,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [96, 724.0]
+    coordinate: [96, 748.0]
     rotation: 0
     state: enabled
 

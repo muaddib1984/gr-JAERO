@@ -2,6 +2,10 @@
 gr-JAERO is a [GNURadio-based](https://github.com/gnuradio/gnuradio) Upper Sideband AM (USB) demodulator and custom ZMQ block that sends the demodulated audio band data over a ZMQ socket interface to the popular program "JAERO".
 JAERO receives USB audio band data and decodes AERO mode SATCOM Signals. Read more about it [here](https://www.github.com/jontio/JAERO) This GNURadio Module provides a simple USB demodulator 
 The Upper Sideband Demodulator is modeled directly after [SDRReceiver](https://github.com/jeroenbeijer/SDRReceiver) project which is also a USB demodulator/ZMQ interface to JAERO.   
+
+![](images/JAERO_fosphor.png)
+
+![](images/JAERO_UHD_Flowgraph.png)
 ## Description
 The aim of this project was simply to allow GNURadio users the 
 ability to send demodulated data to JAERO. By leveraging the large

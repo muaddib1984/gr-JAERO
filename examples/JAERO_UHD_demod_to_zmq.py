@@ -517,8 +517,8 @@ class JAERO_UHD_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
         self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
-        self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.qtgui_freq_sink_x_0_0_1, 0))
+        self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.qtgui_freq_sink_x_0_0_1_0_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
@@ -546,8 +546,8 @@ class JAERO_UHD_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.set_dec1_rate((self.samp_rate/self.dec0)/self.dec1)
         self.set_taps(firdes.low_pass(1.0, self.samp_rate, ((self.dec0_rate)/2)*.8, ((self.dec0_rate)/2)*.2, window.WIN_HAMMING, 6.76))
         self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, self.samp_rate/self.dec0, self.lpf, (self.dec1_rate/2)*.2, window.WIN_HAMMING, 6.76))
-        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
         self.qtgui_freq_sink.set_frequency_range(self.freq, self.samp_rate)
+        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
 
     def get_dec0(self):
         return self.dec0
@@ -689,8 +689,8 @@ class JAERO_UHD_demod_to_zmq(gr.top_block, Qt.QWidget):
 
     def set_freq(self, freq):
         self.freq = freq
-        self.uhd_usrp_source_0.set_center_freq(self.freq, 0)
         self.qtgui_freq_sink.set_frequency_range(self.freq, self.samp_rate)
+        self.uhd_usrp_source_0.set_center_freq(self.freq, 0)
 
     def get_audio_volume(self):
         return self.audio_volume
