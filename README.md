@@ -72,30 +72,30 @@ I/Q stream -> USB demodulator -> float to short -> ZMQ -> JAERO
 
 Open the flowgraph of choice for your I/Q stream (SDR Hardware, Pre-recorded I/Q file)
 run the graph and the following window will open:
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/USB_Demod_GUI.png)
+![](images/USB_Demod_GUI.png)
 
 Adjust the 'Freq Shift' slider until a signal is about 1-2khz to the right of 0
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/USB_Demod_freq_shift_GUI.png)
+![](images/USB_Demod_freq_shift_GUI.png)
 
 Then adjust the 'Channel LPF' slider to filter out other signals
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/USB_Demod_channel_LPF_GUI.png)
+![](images/USB_Demod_channel_LPF_GUI.png)
 
 You will notice in the 'Complex to Real/Imag' FFT window that a mirror image has been
 created as well.
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/USB_Demod_GUI_mirror.png)
+![](images/USB_Demod_GUI_mirror.png)
 Now adjust the 'LO Freq' slider until you see 4 peaks in the 'BFO Shifted Real/Imag' window.
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/USB_Demod_BFO_shift.png)
+![](images/USB_Demod_BFO_shift.png)
 Only the spectrum to the right of 0 will be sent to JAERO. 
 
 As an optional step, adjust the Audio LPF. This can remove some of the sideband noise.
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/USB_Demod_audio_LPF_GUI.png)
+![](images/USB_Demod_audio_LPF_GUI.png)
 Switch to the JAERO application.
 You should see the 2 peaks from the right side of the spectrum in the frequency window
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/JAERO_freq.png)
+![](images/JAERO_freq.png)
 Depending on what types of channels you're looking at, you'll need to choose the correct bandwidth. 
 The channel shown here is 1200bps, so I select 1200bps from the 'Speed' dropdown
 and click on the right-most peak in the window.
-![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/JAERO_right_peak.png)
+![](images/JAERO_right_peak.png)
 Adjust Volume as necessary in the GNURadio flowgraph by moving the 'Audio Volume' slider.
 (you may see data in the 'SUs' console without the Volume light on, but it's good practice to have all lights green in JAERO)
 You should see data in the 'SUs' console and/or the ACARS console and also the 'Plane Log' window. 
