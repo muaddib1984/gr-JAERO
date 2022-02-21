@@ -72,23 +72,32 @@ I/Q stream -> USB demodulator -> float to short -> ZMQ -> JAERO
 
 Open the flowgraph of choice for your I/Q stream (SDR Hardware, Pre-recorded I/Q file)
 run the graph and the following window will open:
+
 ![](images/USB_Demod_GUI.png)
 
 Adjust the 'Freq Shift' slider until a signal is about 1-2khz to the right of 0
+
 ![](images/USB_Demod_freq_shift_GUI.png)
 
 Then adjust the 'Channel LPF' slider to filter out other signals
+
 ![](images/USB_Demod_channel_LPF_GUI.png)
 
 You will notice in the 'Complex to Real/Imag' FFT window that a mirror image has been
 created as well.
+
 ![](images/USB_Demod_GUI_mirror.png)
+
 Now adjust the 'LO Freq' slider until you see 4 peaks in the 'BFO Shifted Real/Imag' window.
+
 ![](images/USB_Demod_BFO_shift.png)
+
 Only the spectrum to the right of 0 will be sent to JAERO. 
 
 As an optional step, adjust the Audio LPF. This can remove some of the sideband noise.
+
 ![](images/USB_Demod_audio_LPF_GUI.png)
+
 Switch to the JAERO application.
 You should see the 2 peaks from the right side of the spectrum in the frequency window
 ![](images/JAERO_freq.png)
