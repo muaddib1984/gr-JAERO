@@ -53,7 +53,7 @@ rate be sent along with every batch of 16-bit shorts it receives. This is to tel
 ## Usage
 - Launch JAERO
   - in the JAERO settings menu, check the ZMQ Audio option and change set the address to 'tcp://127.0.0.1:6001'
-  - ![](/home/muaddib/prefix/newgr39/src/gr-JAERO/images/JAERO_zmq_menu.png)
+  - ![](images/JAERO_zmq_menu.png)
 - In gr-JAERO/grc open the heir block called "JAERO_USB_demod_heir". Click the 'execute' (play icon) button, 
 then click the reload blocks button to add the heir block to GNURadio.
 - To use gr-JAERO with an RTLSDR:
