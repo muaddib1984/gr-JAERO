@@ -29,11 +29,16 @@ Pre-recorded I/Q file types that can also be used are:
  - Raw '.cfile' or '.fc32' from GNURadio
 
 ## Dependencies
-The only dependency for gr-JAERO is GNURadio. 
+ - GNURadio
+ - JAERO
+
+gr-JAERO is a module for GNURadio, so GNURadio will need to be installed first. 
 The dependencies that are included when installing 
-GNURadio should cover all thats needed.
-There are up-to-date instructions on the various methods 
+GNURadio should cover anything that gr-JAERO needs.
+There are up-to-date instructions on the various installation methods 
 for GNURadio [here](https://wiki.gnuradio.org/index.php?title=InstallingGR)
+
+If you are unfamiliar with GNURadio, there is a fantastic tutorial series [here](https://wiki.gnuradio.org/index.php?title=Tutorials)
 
 ## Installation
 <pre>git clone https://github.com/muaddib1984/gr-JAERO
@@ -45,7 +50,7 @@ make
 sudo make install
 sudo ldconfig
 </pre>
-
+Once installed, open GNURadio and click navigate to the ```gr-JAERO/grc``` directory. Open the 
 Go to the [JAERO](https://github.com/jontio/JAERO) project for installation instructions for JAERO.
 
 ##Contents
