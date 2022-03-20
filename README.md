@@ -28,6 +28,13 @@ Pre-recorded I/Q file types that can also be used are:
  - WAV format I/Q from SDR#
  - Raw '.cfile' or '.fc32' from GNURadio
 
+## Dependencies
+The only dependency for gr-JAERO is GNURadio. 
+The dependencies that are included when installing 
+GNURadio should cover all thats needed.
+There are up-to-date instructions on the various methods 
+for GNURadio [here](https://wiki.gnuradio.org/index.php?title=InstallingGR)
+
 ## Installation
 <pre>git clone https://github.com/muaddib1984/gr-JAERO
 cd gr-JAERO 
