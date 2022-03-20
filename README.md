@@ -32,6 +32,7 @@ Pre-recorded I/Q file types that can also be used are:
 <pre>git clone https://github.com/muaddib1984/gr-JAERO
 cd gr-JAERO 
 mkdir build
+cd build
 cmake .. 
 make
 sudo make install
