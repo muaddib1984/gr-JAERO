@@ -8,7 +8,7 @@
 # Title: JAERO to ZMQ
 # Author: muaddib
 # Description: Upper SIdeband AM Demodulator with ZMQ Output to feed JAERO
-# GNU Radio version: 3.9.4.0
+# GNU Radio version: 3.9.5.0
 
 from distutils.version import StrictVersion
 
@@ -32,7 +32,6 @@ from gnuradio import qtgui
 from gnuradio.filter import firdes
 import sip
 from gnuradio import blocks
-import pmt
 from gnuradio import filter
 from gnuradio import gr
 from gnuradio.fft import window
@@ -40,6 +39,7 @@ import signal
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio import zeromq
 from gnuradio.filter import pfb
 from gnuradio.qtgui import Range, RangeWidget
 from PyQt5 import QtCore
@@ -85,10 +85,10 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 240e3
+        self.samp_rate = samp_rate = 2000e3
         self.dec0 = dec0 = 10 if samp_rate >= 480000 else 5 if samp_rate >=50000 else 1
         self.dec0_rate = dec0_rate = samp_rate/dec0
-        self.dec1 = dec1 = 10 if dec0_rate > 48000 else 1
+        self.dec1 = dec1 = 10 if dec0_rate > 480000 else 1
         self.dec1_rate = dec1_rate = (samp_rate/dec0)/dec1
         self.audio_rate = audio_rate = 48000
         self.rs_rate = rs_rate = ((audio_rate)/dec1_rate)*dec1_rate
@@ -170,6 +170,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(2, 3):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5000', 100, True, -1, '')
         self.qtgui_freq_sink_x_0_0_1_0_1 = qtgui.freq_sink_f(
             1024, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
@@ -465,8 +466,6 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
                 6.76))
         self.freq_xlating_fir_filter_xxx_0 = filter.freq_xlating_fir_filter_ccc(dec0, taps, shift, samp_rate)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_gr_complex*1, '/path/to/gnuradio/complex/iq_file.cfile', True, 0, 0)
-        self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
         self.blocks_complex_to_float_0 = blocks.complex_to_float(1)
         self.JAERO_zmq_sink_0 = JAERO.JAERO_zmq_sink('tcp://127.0.0.1:6001', 'JAERO', 48000.0)
         self.JAERO_USB_demod_0 = JAERO_USB_demod(
@@ -480,7 +479,6 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         )
 
 
-
         ##################################################
         # Connections
         ##################################################
@@ -490,16 +488,16 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
         self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
-        self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.qtgui_freq_sink_x_0_0_1, 0))
-        self.connect((self.blocks_file_source_0, 0), (self.blocks_throttle_0, 0))
-        self.connect((self.blocks_file_source_0, 0), (self.qtgui_freq_sink, 0))
+        self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.blocks_throttle_0, 0), (self.freq_xlating_fir_filter_xxx_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.qtgui_freq_sink_x_0_0_1_0_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_complex_to_float_0, 0))
+        self.connect((self.zeromq_sub_source_0, 0), (self.blocks_throttle_0, 0))
+        self.connect((self.zeromq_sub_source_0, 0), (self.qtgui_freq_sink, 0))
 
 
     def closeEvent(self, event):
@@ -537,7 +535,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
 
     def set_dec0_rate(self, dec0_rate):
         self.dec0_rate = dec0_rate
-        self.set_dec1(10 if self.dec0_rate > 48000 else 1)
+        self.set_dec1(10 if self.dec0_rate > 480000 else 1)
         self.set_taps(firdes.low_pass(1.0, self.samp_rate, ((self.dec0_rate)/2)*.8, ((self.dec0_rate)/2)*.2, window.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0_0_1_0_0.set_frequency_range(1555622487+self.shift, self.dec0_rate)
 

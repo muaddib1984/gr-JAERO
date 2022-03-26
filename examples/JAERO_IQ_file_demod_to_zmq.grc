@@ -23,6 +23,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: JAERO to ZMQ
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
@@ -294,7 +295,7 @@ blocks:
   id: variable
   parameters:
     comment: Sample Rate of your Capture File
-    value: 240e3
+    value: 2000e3
   states:
     bus_sink: false
     bus_source: false

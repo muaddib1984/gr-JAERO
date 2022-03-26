@@ -8,7 +8,7 @@
 # Title: JAERO to ZMQ
 # Author: muaddib
 # Description: Upper SIdeband AM Demodulator with ZMQ Output to feed JAERO
-# GNU Radio version: 3.9.4.0
+# GNU Radio version: 3.9.5.0
 
 from distutils.version import StrictVersion
 
@@ -85,7 +85,7 @@ class JAERO_RTLSDR_demod_to_zmq(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 3200e3
+        self.samp_rate = samp_rate = 1920e3
         self.dec0 = dec0 = 10 if (samp_rate/10) >= 50000 else 5 if (samp_rate/5) >=50000 else 2 if (samp_rate/2) >=50000 else 1
         self.dec0_rate = dec0_rate = samp_rate/dec0
         self.dec1 = dec1 = 10 if (dec0_rate/10) >= 48000 else 5 if (dec0_rate/5) >= 48000 else 2 if (dec0_rate/2) >= 48000 else 1
@@ -150,14 +150,14 @@ class JAERO_RTLSDR_demod_to_zmq(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_range = Range(0.0, 49.6, 100, 32.8, 200)
+        self._gain_range = Range(0.0, 49.6, 1, 32.8, 200)
         self._gain_win = RangeWidget(self._gain_range, self.set_gain, "SDR RF Gain", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._gain_win, 7, 1, 1, 1)
         for r in range(7, 8):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._freq_range = Range(52e6, 2200e6, 100, 1545e6, 200)
+        self._freq_range = Range(52e6, 2200e6, 2.5e3, 1545e6, 200)
         self._freq_win = RangeWidget(self._freq_range, self.set_freq, "SDR Center Frequency", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._freq_win, 7, 0, 1, 1)
         for r in range(7, 8):
@@ -505,16 +505,15 @@ class JAERO_RTLSDR_demod_to_zmq(gr.top_block, Qt.QWidget):
         )
 
 
-
         ##################################################
         # Connections
         ##################################################
         self.connect((self.JAERO_USB_demod_0, 2), (self.JAERO_zmq_sink_0, 0))
-        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
+        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
-        self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
+        self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.qtgui_freq_sink_x_0_0_1, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.low_pass_filter_0, 0))
