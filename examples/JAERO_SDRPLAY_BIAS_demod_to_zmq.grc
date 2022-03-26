@@ -1,7 +1,6 @@
 options:
   parameters:
     author: muaddib
-    catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -11,7 +10,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: JAERO_RTLSDR_demod_to_zmq
+    id: JAERO_SDRPLAY_BIAS_demod_to_zmq
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -23,6 +22,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: JAERO to ZMQ
+    window_size: ''
   states:
     bus_sink: false
     bus_source: false
@@ -39,7 +39,7 @@ blocks:
     gui_hint: 5,2,1,1
     label: LO Freq
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '0'
     step: '10'
@@ -60,7 +60,7 @@ blocks:
     gui_hint: 6,1,1,1
     label: Audio LPF
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '600'
     step: '100'
@@ -93,7 +93,7 @@ blocks:
     gui_hint: 5,3,1,1
     label: Audio Volume
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '0.1'
     step: '0.1'
@@ -176,7 +176,7 @@ blocks:
     gui_hint: 7,0,1,1
     label: SDR Center Frequency
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: 52e6
     step: '100'
@@ -187,7 +187,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 260.0]
+    coordinate: [19, 389]
     rotation: 0
     state: true
 - name: gain
@@ -197,7 +197,7 @@ blocks:
     gui_hint: 7,1,1,1
     label: SDR RF Gain
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '0.0'
     step: '0.1'
@@ -208,7 +208,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 388.0]
+    coordinate: [13, 518]
     rotation: 0
     state: true
 - name: lpf
@@ -218,7 +218,7 @@ blocks:
     gui_hint: 5,1,1,1
     label: Channel LPF
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '300'
     step: '100'
@@ -239,7 +239,7 @@ blocks:
     gui_hint: 6,3,1,1
     label: Post VFO Low Pass
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '300'
     step: '100'
@@ -260,7 +260,7 @@ blocks:
     gui_hint: 6,2,1,1
     label: Post VFO Low Pass Gain
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '1'
     step: '1'
@@ -326,7 +326,7 @@ blocks:
   id: variable
   parameters:
     comment: Sample Rate of your Capture File
-    value: 3200e3
+    value: 8000e3
   states:
     bus_sink: false
     bus_source: false
@@ -341,7 +341,7 @@ blocks:
     gui_hint: 5,0,1,1
     label: Freq Shift
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: -samp_rate/2
     step: '100'
@@ -381,12 +381,12 @@ blocks:
     gain: '1.0'
     samp_rate: samp_rate
     width: ((dec0_rate)/2)*.2
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [440, 316.0]
+    coordinate: [489, 371]
     rotation: 0
     state: enabled
 - name: JAERO_USB_demod_0
@@ -479,7 +479,7 @@ blocks:
     samp_rate: samp_rate/dec0
     type: fir_filter_ccf
     width: (dec1_rate/2)*.2
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
@@ -560,7 +560,6 @@ blocks:
     minoutbuf: '0'
     name: '"Full Spectrum"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -579,14 +578,14 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [240, 324.0]
+    coordinate: [335, 297]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -641,7 +640,6 @@ blocks:
     minoutbuf: '0'
     name: '"Complex"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -660,7 +658,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -722,7 +720,6 @@ blocks:
     minoutbuf: '0'
     name: '"Complex to Real/Imag"'
     nconnections: '2'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -741,14 +738,14 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1256, 268.0]
+    coordinate: [1251, 294]
     rotation: 180
     state: true
 - name: qtgui_freq_sink_x_0_0_1_0
@@ -803,7 +800,6 @@ blocks:
     minoutbuf: '0'
     name: '"BFO Shifted Real/Imag"'
     nconnections: '2'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -822,14 +818,14 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 508.0]
+    coordinate: [755, 469]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0_0_1_0_0
@@ -884,7 +880,6 @@ blocks:
     minoutbuf: '0'
     name: '"Shifted Spectrum"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -903,7 +898,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -965,7 +960,6 @@ blocks:
     minoutbuf: '0'
     name: '"Signal to JAERO"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -984,7 +978,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -994,26 +988,73 @@ blocks:
     coordinate: [752, 724.0]
     rotation: 0
     state: true
-- name: soapy_rtlsdr_source_0
-  id: soapy_rtlsdr_source
+- name: soapy_source_0
+  id: soapy_source
   parameters:
     affinity: ''
-    agc: 'False'
+    agc0: 'False'
+    agc1: 'False'
     alias: ''
-    center_freq: freq
+    amp_gain0: '0'
+    ant0: RX
+    ant1: RX2
+    args: ''
+    balance0: '0'
+    balance1: '0'
+    bw0: '0'
+    bw1: '0'
+    center_freq0: freq
+    center_freq1: '0'
+    clock_rate: '0'
+    clock_source: ''
     comment: ''
-    dev_args: ''
-    freq_correction: '0'
-    gain: gain
+    correction0: '0'
+    correction1: '0'
+    dc_offset0: '0'
+    dc_offset1: '0'
+    dc_removal0: 'False'
+    dc_removal1: 'True'
+    dev: driver=rtlsdr
+    devname: sdrplay
+    gain_mode0: Overall
+    gain_mode1: Overall
+    ifgr_gain: '59'
+    lna_gain0: '10'
+    lna_gain1: '10'
     maxoutbuf: '0'
     minoutbuf: '0'
+    mix_gain0: '10'
+    nchan: '1'
+    nco_freq0: '0'
+    nco_freq1: '0'
+    overall_gain0: gain
+    overall_gain1: '10'
+    pga_gain0: '24'
+    pga_gain1: '24'
+    rfgr_gain: '9'
+    rxvga1_gain: '5'
+    rxvga2_gain: '0'
     samp_rate: samp_rate
+    sdrplay_agc_setpoint: '-30'
+    sdrplay_biastee: 'True'
+    sdrplay_dabnotch: 'False'
+    sdrplay_if_mode: Zero-IF
+    sdrplay_rfnotch: 'False'
+    settings0: ''
+    settings1: ''
+    stream_args: ''
+    tia_gain0: '0'
+    tia_gain1: '0'
+    tune_args0: ''
+    tune_args1: ''
+    tuner_gain0: '10'
     type: fc32
+    vga_gain0: '10'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 180.0]
+    coordinate: [60, 101]
     rotation: 0
     state: true
 - name: virtual_sink_0
@@ -1083,8 +1124,8 @@ connections:
 - [low_pass_filter_0, '0', pfb_arb_resampler_xxx_0, '0']
 - [low_pass_filter_0, '0', qtgui_freq_sink_x_0, '0']
 - [pfb_arb_resampler_xxx_0, '0', blocks_complex_to_float_0, '0']
-- [soapy_rtlsdr_source_0, '0', freq_xlating_fir_filter_xxx_0, '0']
-- [soapy_rtlsdr_source_0, '0', qtgui_freq_sink, '0']
+- [soapy_source_0, '0', freq_xlating_fir_filter_xxx_0, '0']
+- [soapy_source_0, '0', qtgui_freq_sink, '0']
 - [virtual_source_0, '0', JAERO_USB_demod_0, '0']
 - [virtual_source_0_0, '0', JAERO_USB_demod_0, '1']
 

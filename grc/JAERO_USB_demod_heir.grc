@@ -1,7 +1,6 @@
 options:
   parameters:
     author: muaddib
-    catch_exceptions: 'True'
     category: '[JAERO]'
     cmake_opt: ''
     comment: ''
@@ -23,6 +22,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: JAERO USB Demodulator
+    window_size: ''
   states:
     bus_sink: false
     bus_source: false
@@ -330,7 +330,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     num_taps: '125'
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
@@ -348,7 +348,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     num_taps: '125'
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
@@ -372,7 +372,7 @@ blocks:
     samp_rate: audio_rate
     type: fir_filter_fff
     width: (audio_rate/2)*.2
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
@@ -396,7 +396,7 @@ blocks:
     samp_rate: audio_rate
     type: fir_filter_fff
     width: (audio_rate/2)*.2
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
@@ -420,7 +420,7 @@ blocks:
     samp_rate: audio_rate
     type: fir_filter_fff
     width: 1e3
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false

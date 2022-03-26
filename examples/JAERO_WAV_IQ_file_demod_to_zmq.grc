@@ -1,7 +1,6 @@
 options:
   parameters:
     author: muaddib
-    catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -23,6 +22,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: JAERO to ZMQ
+    window_size: ''
   states:
     bus_sink: false
     bus_source: false
@@ -39,7 +39,7 @@ blocks:
     gui_hint: 5,2,1,1
     label: LO Freq
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '0'
     step: '10'
@@ -60,7 +60,7 @@ blocks:
     gui_hint: 6,1,1,1
     label: Audio LPF
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '600'
     step: '100'
@@ -93,7 +93,7 @@ blocks:
     gui_hint: 5,3,1,1
     label: Audio Volume
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '0.1'
     step: '0.1'
@@ -188,7 +188,7 @@ blocks:
     gui_hint: 5,1,1,1
     label: Channel LPF
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '300'
     step: '100'
@@ -209,7 +209,7 @@ blocks:
     gui_hint: 6,3,1,1
     label: Post VFO Low Pass
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '300'
     step: '100'
@@ -230,7 +230,7 @@ blocks:
     gui_hint: 6,2,1,1
     label: Post VFO Low Pass Gain
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: '1'
     step: '1'
@@ -311,7 +311,7 @@ blocks:
     gui_hint: 5,0,1,1
     label: Freq Shift
     min_len: '200'
-    orient: QtCore.Qt.Horizontal
+    orient: Qt.Horizontal
     rangeType: float
     start: -samp_rate/2
     step: '100'
@@ -351,7 +351,7 @@ blocks:
     gain: '1.0'
     samp_rate: samp_rate
     width: ((dec0_rate)/2)*.2
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
@@ -502,7 +502,7 @@ blocks:
     samp_rate: samp_rate/dec0
     type: fir_filter_ccf
     width: (dec1_rate/2)*.2
-    win: window.WIN_HAMMING
+    win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
@@ -583,7 +583,6 @@ blocks:
     minoutbuf: '0'
     name: '"Full Spectrum"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -602,7 +601,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -664,7 +663,6 @@ blocks:
     minoutbuf: '0'
     name: '"Complex"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -683,7 +681,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -745,7 +743,6 @@ blocks:
     minoutbuf: '0'
     name: '"Complex to Real/Imag"'
     nconnections: '2'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -764,7 +761,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -826,7 +823,6 @@ blocks:
     minoutbuf: '0'
     name: '"BFO Shifted Real/Imag"'
     nconnections: '2'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -845,7 +841,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -907,7 +903,6 @@ blocks:
     minoutbuf: '0'
     name: '"Shifted Spectrum"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -926,7 +921,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:
@@ -988,7 +983,6 @@ blocks:
     minoutbuf: '0'
     name: '"Signal to JAERO"'
     nconnections: '1'
-    norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
@@ -1007,7 +1001,7 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: window.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_BLACKMAN_hARRIS
     ymax: '10'
     ymin: '-140'
   states:

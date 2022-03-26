@@ -41,9 +41,12 @@ from gnuradio import eng_notation
 from gnuradio.filter import pfb
 from gnuradio.qtgui import Range, RangeWidget
 import JAERO
+import soapy
+import distutils
+from distutils import util
 from gnuradio import qtgui
 
-class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
+class JAERO_SDRPLAY_BIAS_demod_to_zmq(gr.top_block, Qt.QWidget):
 
     def __init__(self):
         gr.top_block.__init__(self, "JAERO to ZMQ")
@@ -66,7 +69,7 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "JAERO_WAV_IQ_file_demod_to_zmq")
+        self.settings = Qt.QSettings("GNU Radio", "JAERO_SDRPLAY_BIAS_demod_to_zmq")
 
         try:
             if StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
@@ -79,7 +82,7 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 250e3
+        self.samp_rate = samp_rate = 8000e3
         self.dec0 = dec0 = 10 if (samp_rate/10) >= 50000 else 5 if (samp_rate/5) >=50000 else 2 if (samp_rate/2) >=50000 else 1
         self.dec0_rate = dec0_rate = samp_rate/dec0
         self.dec1 = dec1 = 10 if (dec0_rate/10) >= 48000 else 5 if (dec0_rate/5) >= 48000 else 2 if (dec0_rate/2) >= 48000 else 1
@@ -96,7 +99,8 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.lpf_gain = lpf_gain = 1
         self.lpf_freq = lpf_freq = (rs_rate/2)
         self.lpf = lpf = (dec1_rate/2)*.8
-        self.freq = freq = 1555622487
+        self.gain = gain = 32.8
+        self.freq = freq = 1545e6
         self.audio_volume = audio_volume = 0.9
         self.audio_lpf = audio_lpf = (audio_rate/2)
         self.LO_freq = LO_freq = 900
@@ -143,6 +147,20 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self._gain_range = Range(0.0, 49.6, 100, 32.8, 200)
+        self._gain_win = RangeWidget(self._gain_range, self.set_gain, 'SDR RF Gain', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._gain_win, 7, 1, 1, 1)
+        for r in range(7, 8):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(1, 2):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._freq_range = Range(52e6, 2200e6, 100, 1545e6, 200)
+        self._freq_win = RangeWidget(self._freq_range, self.set_freq, 'SDR Center Frequency', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._freq_win, 7, 0, 1, 1)
+        for r in range(7, 8):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._audio_volume_range = Range(0.1, 10.0, 0.1, 0.9, 200)
         self._audio_volume_win = RangeWidget(self._audio_volume_range, self.set_audio_volume, 'Audio Volume', "counter_slider", float)
         self.top_grid_layout.addWidget(self._audio_volume_win, 5, 3, 1, 1)
@@ -164,6 +182,54 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(2, 3):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self.soapy_source_0 = None
+        # Make sure that the gain mode is valid
+        if('Overall' not in ['Overall', 'Specific', 'Settings Field']):
+            raise ValueError("Wrong gain mode on channel 0. Allowed gain modes: "
+                  "['Overall', 'Specific', 'Settings Field']")
+
+        dev = 'driver=sdrplay'
+
+        # Stream arguments for every activated stream
+        tune_args = ['']
+        settings = ['']
+
+        # Setup the device arguments
+
+        dev_args = "if_mode=Zero-IF, agc_setpoint=-30, biasT_ctrl=true, rfnotch_ctrl=false, dabnotch_ctrl=false"
+
+        self.soapy_source_0 = soapy.source(1, dev, dev_args, '',
+                                  tune_args, settings, samp_rate, "fc32")
+
+
+
+        self.soapy_source_0.set_dc_removal(0,bool(distutils.util.strtobool('False')))
+
+        # Set up DC offset. If set to (0, 0) internally the source block
+        # will handle the case if no DC offset correction is supported
+        self.soapy_source_0.set_dc_offset(0,0)
+
+        # Setup IQ Balance. If set to (0, 0) internally the source block
+        # will handle the case if no IQ balance correction is supported
+        self.soapy_source_0.set_iq_balance(0,0)
+
+        self.soapy_source_0.set_agc(0,False)
+
+        # generic frequency setting should be specified first
+        self.soapy_source_0.set_frequency(0, freq)
+
+        self.soapy_source_0.set_frequency(0,"BB",0)
+
+        # Setup Frequency correction. If set to 0 internally the source block
+        # will handle the case if no frequency correction is supported
+        self.soapy_source_0.set_frequency_correction(0,0)
+
+        self.soapy_source_0.set_antenna(0,'RX')
+
+        if('Overall' != 'Settings Field'):
+            # pass is needed, in case the template does not evaluare anything
+            pass
+            self.soapy_source_0.set_gain(0,gain)
         self.qtgui_freq_sink_x_0_0_1_0_1 = qtgui.freq_sink_f(
             1024, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
@@ -446,9 +512,6 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
                 firdes.WIN_HAMMING,
                 6.76))
         self.freq_xlating_fir_filter_xxx_0 = filter.freq_xlating_fir_filter_ccc(dec0, taps, shift, samp_rate)
-        self.blocks_wavfile_source_0_0 = blocks.wavfile_source('/path/to/iq/WAV/file.wav', True)
-        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
-        self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
         self.blocks_complex_to_float_0 = blocks.complex_to_float(1)
         self.JAERO_zmq_sink_0 = JAERO.JAERO_zmq_sink('tcp://127.0.0.1:6001', 'JAERO', 48000.0)
         self.JAERO_USB_demod_0 = JAERO_USB_demod(
@@ -467,26 +530,23 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.connect((self.JAERO_USB_demod_0, 2), (self.JAERO_zmq_sink_0, 0))
-        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
+        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
         self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.qtgui_freq_sink_x_0_0_1, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
-        self.connect((self.blocks_float_to_complex_0, 0), (self.blocks_throttle_0, 0))
-        self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_freq_sink, 0))
-        self.connect((self.blocks_throttle_0, 0), (self.freq_xlating_fir_filter_xxx_0, 0))
-        self.connect((self.blocks_wavfile_source_0_0, 1), (self.blocks_float_to_complex_0, 0))
-        self.connect((self.blocks_wavfile_source_0_0, 0), (self.blocks_float_to_complex_0, 1))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.qtgui_freq_sink_x_0_0_1_0_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_complex_to_float_0, 0))
+        self.connect((self.soapy_source_0, 0), (self.freq_xlating_fir_filter_xxx_0, 0))
+        self.connect((self.soapy_source_0, 0), (self.qtgui_freq_sink, 0))
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "JAERO_WAV_IQ_file_demod_to_zmq")
+        self.settings = Qt.QSettings("GNU Radio", "JAERO_SDRPLAY_BIAS_demod_to_zmq")
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
@@ -498,7 +558,6 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.set_dec0(10 if (self.samp_rate/10) >= 50000 else 5 if (self.samp_rate/5) >=50000 else 2 if (self.samp_rate/2) >=50000 else 1)
         self.set_dec0_rate(self.samp_rate/self.dec0)
         self.set_dec1_rate((self.samp_rate/self.dec0)/self.dec1)
-        self.blocks_throttle_0.set_sample_rate(self.samp_rate)
         self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, self.samp_rate/self.dec0, self.lpf, (self.dec1_rate/2)*.2, firdes.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink.set_frequency_range(self.freq, self.samp_rate)
 
@@ -629,12 +688,20 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.lpf = lpf
         self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, self.samp_rate/self.dec0, self.lpf, (self.dec1_rate/2)*.2, firdes.WIN_HAMMING, 6.76))
 
+    def get_gain(self):
+        return self.gain
+
+    def set_gain(self, gain):
+        self.gain = gain
+        self.soapy_source_0.set_gain(0, self.gain)
+
     def get_freq(self):
         return self.freq
 
     def set_freq(self, freq):
         self.freq = freq
         self.qtgui_freq_sink.set_frequency_range(self.freq, self.samp_rate)
+        self.soapy_source_0.set_frequency(0, self.freq)
 
     def get_audio_volume(self):
         return self.audio_volume
@@ -659,7 +726,7 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=JAERO_WAV_IQ_file_demod_to_zmq, options=None):
+def main(top_block_cls=JAERO_SDRPLAY_BIAS_demod_to_zmq, options=None):
 
     if StrictVersion("4.5.0") <= StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')
