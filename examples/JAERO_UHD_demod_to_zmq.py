@@ -8,9 +8,9 @@
 # Title: JAERO to ZMQ
 # Author: muaddib
 # Description: Upper SIdeband AM Demodulator with ZMQ Output to feed JAERO
-# GNU Radio version: 3.9.4.0
+# GNU Radio version: v3.10.1.0-1-g23e41fa4
 
-from distutils.version import StrictVersion
+from packaging.version import Version as StrictVersion
 
 if __name__ == '__main__':
     import ctypes
@@ -151,7 +151,7 @@ class JAERO_UHD_demod_to_zmq(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._gain_range = Range(0.0, 49.6, 100, 32.8, 200)
+        self._gain_range = Range(0.0, 76.0, 1.0, 32.8, 200)
         self._gain_win = RangeWidget(self._gain_range, self.set_gain, "SDR RF Gain", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._gain_win, 7, 1, 1, 1)
         for r in range(7, 8):
@@ -507,13 +507,12 @@ class JAERO_UHD_demod_to_zmq(gr.top_block, Qt.QWidget):
         )
 
 
-
         ##################################################
         # Connections
         ##################################################
         self.connect((self.JAERO_USB_demod_0, 2), (self.JAERO_zmq_sink_0, 0))
-        self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
         self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
+        self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
         self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))

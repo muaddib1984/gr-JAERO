@@ -23,6 +23,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: JAERO to ZMQ
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
@@ -200,8 +201,8 @@ blocks:
     orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0.0'
-    step: '100'
-    stop: '49.6'
+    step: '1.0'
+    stop: '76.0'
     value: '32.8'
     widget: counter_slider
   states:
@@ -325,7 +326,7 @@ blocks:
 - name: samp_rate
   id: variable
   parameters:
-    comment: Sample Rate of your Capture File
+    comment: Sample Rate of your SDR
     value: 2400e3
   states:
     bus_sink: false
