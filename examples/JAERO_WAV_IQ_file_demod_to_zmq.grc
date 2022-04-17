@@ -455,7 +455,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    file: /home/muaddib/JAERO_STUFF/jontio_files/SDRSharp_20151129_220006Z_1546000000Hz_IQ.wav
+    file: /path/to/wav/file.wav
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'
