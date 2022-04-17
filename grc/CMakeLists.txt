@@ -5,8 +5,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-
 install(FILES
     JAERO_JAERO_zmq_sink.block.yml
-    JAERO_JAERO_USB_demod.block.yml DESTINATION share/gnuradio/grc/blocks
+    DESTINATION share/gnuradio/grc/blocks
 )

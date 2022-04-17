@@ -23,7 +23,7 @@ GR_PYTHON_INSTALL(
     FILES
     __init__.py
     JAERO_zmq_sink.py
-    JAERO_USB_demod.py DESTINATION ${GR_PYTHON_DIR}/JAERO
+    DESTINATION ${GR_PYTHON_DIR}/JAERO
 )
 
 ########################################################################

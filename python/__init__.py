@@ -21,5 +21,5 @@ except ModuleNotFoundError:
 
 # import any pure python here
 from .JAERO_zmq_sink import JAERO_zmq_sink
-from .JAERO_USB_demod import JAERO_USB_demod
+
 #
