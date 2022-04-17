@@ -29,6 +29,6 @@ class JAERO_zmq_sink(gr.sync_block):
     def work(self, input_items, output_items):
         msg=input_items[0]
         self.backend.send_string(self.topic, zmq.SNDMORE)
-        self.backend.send(np.array(self.rate, dtype='<u2'), zmq.SNDMORE)
+        self.backend.send(np.array(self.rate, dtype='<u4'), zmq.SNDMORE)
         self.backend.send(msg)
         return len(input_items[0])
