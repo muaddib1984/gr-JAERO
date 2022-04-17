@@ -511,11 +511,11 @@ class JAERO_UHD_demod_to_zmq(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.connect((self.JAERO_USB_demod_0, 2), (self.JAERO_zmq_sink_0, 0))
-        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
+        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
-        self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
+        self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 0), (self.qtgui_freq_sink_x_0_0_1, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.low_pass_filter_0, 0))

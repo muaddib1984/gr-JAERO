@@ -127,6 +127,7 @@ Adjust Volume as necessary in the GNURadio flowgraph by moving the 'Audio Volume
 You should see data in the 'SUs' console and/or the ACARS console and also the 'Plane Log' window. 
 
 ## Testing/Verification
+
 Testing has been done with live SDR data streams and pre-recorded I/Q files.
 For Live testing a Nooelec L-Band Patch antenna with Nooelec Sawbird IO Filter/LNA was used.
 SNR of 6-10dB is ideal.
@@ -134,6 +135,11 @@ Pre-recorded I/Q file demod/decode of 600bps, 1200bps,10500bps channels has been
 Live demod/decode from live 600bps and 1200bps channels has been successful. 
 Continued effort will be focused on live demod/decode of 10500bps and 8400bps.
 Success stories and I/Q recordings of 8400bps are welcome.
+
+==**update APRIL 2022**==
+Overhauled my RF Frontend/USB Demodulator and added a C-Band Dish:
+600/1200/10500/8400 in L-Band AND 10500-burst in C-Band have been decoded successfully with gr-JAERO!!!
+Still on the hunt for 1200bps bursts, gotta catch 'em all!
 
 ## Credits
 I can't thank [Jontio](https://github.com/jontio) enough for his help figuring this out. 

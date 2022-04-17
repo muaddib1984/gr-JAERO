@@ -23,6 +23,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: JAERO to ZMQ
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
@@ -454,7 +455,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    file: /path/to/iq/WAV/file.wav
+    file: /home/muaddib/JAERO_STUFF/jontio_files/SDRSharp_20151129_220006Z_1546000000Hz_IQ.wav
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'

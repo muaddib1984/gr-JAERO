@@ -22,7 +22,8 @@ add_subdirectory(bindings)
 GR_PYTHON_INSTALL(
     FILES
     __init__.py
-    JAERO_zmq_sink.py DESTINATION ${GR_PYTHON_DIR}/JAERO
+    JAERO_zmq_sink.py
+    JAERO_USB_demod.py DESTINATION ${GR_PYTHON_DIR}/JAERO
 )
 
 ########################################################################

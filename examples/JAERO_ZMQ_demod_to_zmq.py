@@ -49,7 +49,7 @@ import JAERO
 
 from gnuradio import qtgui
 
-class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
+class JAERO_ZMQ_demod_to_zmq(gr.top_block, Qt.QWidget):
 
     def __init__(self):
         gr.top_block.__init__(self, "JAERO to ZMQ", catch_exceptions=True)
@@ -72,7 +72,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "JAERO_IQ_file_demod_to_zmq")
+        self.settings = Qt.QSettings("GNU Radio", "JAERO_ZMQ_demod_to_zmq")
 
         try:
             if StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
@@ -85,10 +85,10 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 4000e3
+        self.samp_rate = samp_rate = 2000e3
         self.dec0 = dec0 = 10 if samp_rate >= 480000 else 5 if samp_rate >=50000 else 1
         self.dec0_rate = dec0_rate = samp_rate/dec0
-        self.dec1 = dec1 = 10 if dec0_rate > 480000 else 8
+        self.dec1 = dec1 = 10 if dec0_rate > 480000 else 2
         self.dec1_rate = dec1_rate = (samp_rate/dec0)/dec1
         self.audio_rate = audio_rate = 48000
         self.rs_rate = rs_rate = ((audio_rate)/dec1_rate)*dec1_rate
@@ -171,6 +171,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         for c in range(2, 3):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5000', 100, True, -1, '')
+        self.zeromq_sub_msg_source_0 = zeromq.sub_msg_source('tcp://127.0.0.1:6000', 100, False)
         self.qtgui_freq_sink_x_0_0_1_0_1 = qtgui.freq_sink_f(
             1024, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
@@ -466,6 +467,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
                 6.76))
         self.freq_xlating_fir_filter_xxx_0 = filter.freq_xlating_fir_filter_ccc(dec0, taps, shift, samp_rate)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
+        self.blocks_msgpair_to_var_0 = blocks.msg_pair_to_var(self.set_samp_rate)
         self.blocks_complex_to_float_0 = blocks.complex_to_float(1)
         self.JAERO_zmq_sink_0 = JAERO.JAERO_zmq_sink('tcp://127.0.0.1:6001', 'JAERO', 48000.0)
         self.JAERO_USB_demod_0 = JAERO_USB_demod(
@@ -482,12 +484,13 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
+        self.msg_connect((self.zeromq_sub_msg_source_0, 'out'), (self.blocks_msgpair_to_var_0, 'inpair'))
         self.connect((self.JAERO_USB_demod_0, 2), (self.JAERO_zmq_sink_0, 0))
-        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
+        self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
-        self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
+        self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
         self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.qtgui_freq_sink_x_0_0_1, 0))
         self.connect((self.blocks_throttle_0, 0), (self.freq_xlating_fir_filter_xxx_0, 0))
@@ -501,7 +504,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "JAERO_IQ_file_demod_to_zmq")
+        self.settings = Qt.QSettings("GNU Radio", "JAERO_ZMQ_demod_to_zmq")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -535,7 +538,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
 
     def set_dec0_rate(self, dec0_rate):
         self.dec0_rate = dec0_rate
-        self.set_dec1(10 if self.dec0_rate > 480000 else 8)
+        self.set_dec1(10 if self.dec0_rate > 480000 else 2)
         self.set_taps(firdes.low_pass(1.0, self.samp_rate, ((self.dec0_rate)/2)*.8, ((self.dec0_rate)/2)*.2, window.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink_x_0_0_1_0_0.set_frequency_range(1555622487+self.shift, self.dec0_rate)
 
@@ -680,7 +683,7 @@ class JAERO_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=JAERO_IQ_file_demod_to_zmq, options=None):
+def main(top_block_cls=JAERO_ZMQ_demod_to_zmq, options=None):
 
     if StrictVersion("4.5.0") <= StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')

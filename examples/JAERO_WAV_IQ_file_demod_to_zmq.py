@@ -8,9 +8,9 @@
 # Title: JAERO to ZMQ
 # Author: muaddib
 # Description: Upper SIdeband AM Demodulator with ZMQ Output to feed JAERO
-# GNU Radio version: 3.9.4.0
+# GNU Radio version: v3.10.1.0-1-g23e41fa4
 
-from distutils.version import StrictVersion
+from packaging.version import Version as StrictVersion
 
 if __name__ == '__main__':
     import ctypes
@@ -463,7 +463,7 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
                 window.WIN_HAMMING,
                 6.76))
         self.freq_xlating_fir_filter_xxx_0 = filter.freq_xlating_fir_filter_ccc(dec0, taps, shift, samp_rate)
-        self.blocks_wavfile_source_0_0 = blocks.wavfile_source('/path/to/iq/WAV/file.wav', True)
+        self.blocks_wavfile_source_0_0 = blocks.wavfile_source('/home/muaddib/JAERO_STUFF/jontio_files/SDRSharp_20151129_220006Z_1546000000Hz_IQ.wav', True)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
         self.blocks_complex_to_float_0 = blocks.complex_to_float(1)
@@ -479,23 +479,22 @@ class JAERO_WAV_IQ_file_demod_to_zmq(gr.top_block, Qt.QWidget):
         )
 
 
-
         ##################################################
         # Connections
         ##################################################
         self.connect((self.JAERO_USB_demod_0, 2), (self.JAERO_zmq_sink_0, 0))
-        self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
         self.connect((self.JAERO_USB_demod_0, 0), (self.qtgui_freq_sink_x_0_0_1_0, 0))
+        self.connect((self.JAERO_USB_demod_0, 1), (self.qtgui_freq_sink_x_0_0_1_0, 1))
         self.connect((self.JAERO_USB_demod_0, 3), (self.qtgui_freq_sink_x_0_0_1_0_1, 0))
-        self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.JAERO_USB_demod_0, 1))
+        self.connect((self.blocks_complex_to_float_0, 0), (self.JAERO_USB_demod_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.qtgui_freq_sink_x_0_0_1, 1))
         self.connect((self.blocks_complex_to_float_0, 0), (self.qtgui_freq_sink_x_0_0_1, 0))
         self.connect((self.blocks_float_to_complex_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_freq_sink, 0))
         self.connect((self.blocks_throttle_0, 0), (self.freq_xlating_fir_filter_xxx_0, 0))
-        self.connect((self.blocks_wavfile_source_0_0, 0), (self.blocks_float_to_complex_0, 1))
         self.connect((self.blocks_wavfile_source_0_0, 1), (self.blocks_float_to_complex_0, 0))
+        self.connect((self.blocks_wavfile_source_0_0, 0), (self.blocks_float_to_complex_0, 1))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.qtgui_freq_sink_x_0_0_1_0_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.pfb_arb_resampler_xxx_0, 0))

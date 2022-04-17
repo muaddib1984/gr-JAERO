@@ -23,6 +23,7 @@ options:
     sizing_mode: fixed
     thread_safe_setters: ''
     title: JAERO to ZMQ
+    window_size: (1000,1000)
   states:
     bus_sink: false
     bus_source: false
