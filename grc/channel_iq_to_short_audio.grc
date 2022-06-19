@@ -1,0 +1,418 @@
+options:
+  parameters:
+    author: user
+    catch_exceptions: 'True'
+    category: '[JAERO]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: Takes input of One Channelizer Channel Performs DSP and Sends out
+      16-bit Audio
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: pfb_out_to_jaero_zmq
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: PFB Out to 16-bit Audio Shorts
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: bpf
+  id: variable_band_pass_filter_taps
+  parameters:
+    beta: '6.76'
+    comment: ''
+    gain: '1.0'
+    high_cutoff_freq: (usb_bw)*0.95
+    low_cutoff_freq: (usb_bw)*0.05
+    samp_rate: pfb_rs_rate
+    type: complex_band_pass
+    width: (usb_bw)*0.05
+    win: window.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 372.0]
+    rotation: 0
+    state: enabled
+- name: frac_bw_0
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.45'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [960, 596.0]
+    rotation: 0
+    state: enabled
+- name: nphases_0
+  id: variable
+  parameters:
+    comment: ''
+    value: '32'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 596.0]
+    rotation: 0
+    state: enabled
+- name: pfb_rs_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: audio_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 468.0]
+    rotation: 0
+    state: enabled
+- name: pfb_rs_ratio
+  id: variable
+  parameters:
+    comment: ''
+    value: pfb_rs_rate/pfb_out_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [968, 468.0]
+    rotation: 0
+    state: enabled
+- name: pfb_rs_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: firdes.low_pass(nphases_0, nphases_0, frac_bw_0, 0.5-frac_bw_0)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 532.0]
+    rotation: 0
+    state: enabled
+- name: audio_rate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Audio Rate
+    short_id: ''
+    type: eng_float
+    value: 48e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [728, 76.0]
+    rotation: 0
+    state: true
+- name: audio_volume
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Audio Volume Level
+    short_id: ''
+    type: eng_float
+    value: '100.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1104, 76.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_real_0_0_1_0
+  id: blocks_complex_to_real
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 292.0]
+    rotation: 0
+    state: enabled
+- name: blocks_float_to_short_0_4_1_0
+  id: blocks_float_to_short
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: short_scaling
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1336, 284.0]
+    rotation: 0
+    state: enabled
+- name: blocks_freqshift_cc_0_0_1_0
+  id: blocks_freqshift_cc
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    freq: usb_bw/2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    sample_rate: pfb_rs_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [440, 276.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_vxx_0_4_1_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: audio_volume
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1096, 284.0]
+    rotation: 0
+    state: enabled
+- name: fft_filter_xxx_0_1
+  id: fft_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nthreads: '1'
+    samp_delay: '0'
+    taps: bpf
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 268.0]
+    rotation: 0
+    state: enabled
+- name: interp
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Interpolation
+    short_id: ''
+    type: intx
+    value: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 84.0]
+    rotation: 0
+    state: disabled
+- name: pad_sink_0
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out
+    num_streams: '1'
+    optional: 'False'
+    type: short
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1584, 284.0]
+    rotation: 0
+    state: true
+- name: pad_sink_0_0
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out2
+    num_streams: '1'
+    optional: 'True'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 180.0]
+    rotation: 0
+    state: true
+- name: pad_source_0
+  id: pad_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: in
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '1'
+    optional: 'False'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 284.0]
+    rotation: 0
+    state: true
+- name: pfb_arb_resampler_xxx_0
+  id: pfb_arb_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    atten: '100'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nfilts: '32'
+    rrate: pfb_rs_ratio
+    samp_delay: '0'
+    taps: pfb_rs_taps
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 412.0]
+    rotation: 0
+    state: true
+- name: pfb_out_rate
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Input Samp Rate
+    short_id: ''
+    type: eng_float
+    value: 15e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [456, 76.0]
+    rotation: 0
+    state: true
+- name: rational_resampler_xxx_0_0_1_0
+  id: rational_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    decim: '1'
+    fbw: '0'
+    interp: interp
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    taps: '[]'
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 260.0]
+    rotation: 0
+    state: disabled
+- name: short_scaling
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: Float to Short Scaling
+    short_id: ''
+    type: intx
+    value: '32768'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1352, 76.0]
+    rotation: 0
+    state: true
+- name: usb_bw
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: USB BW
+    short_id: ''
+    type: eng_float
+    value: 24e3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 84.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_complex_to_real_0_0_1_0, '0', blocks_multiply_const_vxx_0_4_1_0, '0']
+- [blocks_float_to_short_0_4_1_0, '0', pad_sink_0, '0']
+- [blocks_freqshift_cc_0_0_1_0, '0', fft_filter_xxx_0_1, '0']
+- [blocks_multiply_const_vxx_0_4_1_0, '0', blocks_float_to_short_0_4_1_0, '0']
+- [fft_filter_xxx_0_1, '0', blocks_complex_to_real_0_0_1_0, '0']
+- [fft_filter_xxx_0_1, '0', pad_sink_0_0, '0']
+- [pad_source_0, '0', pfb_arb_resampler_xxx_0, '0']
+- [pad_source_0, '0', rational_resampler_xxx_0_0_1_0, '0']
+- [pfb_arb_resampler_xxx_0, '0', blocks_freqshift_cc_0_0_1_0, '0']
+- [rational_resampler_xxx_0_0_1_0, '0', blocks_freqshift_cc_0_0_1_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.2.0-rc1

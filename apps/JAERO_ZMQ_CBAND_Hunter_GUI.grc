@@ -1,0 +1,2099 @@
+options:
+  parameters:
+    author: muaddib
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: Visual Display for Spotting CBAND AERO Burst Signals
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: JAERO_ZMQ_CBAND_Hunter_GUI
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: CBAND Hunter GUI
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: audio_volume
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:12,0,1,5
+    label: Audio Signal Volume
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.1'
+    step: '0.1'
+    stop: '1000'
+    value: '100.0'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1576, 20.0]
+    rotation: 0
+    state: enabled
+- name: bin_size
+  id: variable
+  parameters:
+    comment: ''
+    value: (samp_rate/fft_len)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 484.0]
+    rotation: 0
+    state: enabled
+- name: channel_or_subband
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Channel or Subband
+    label0: ''
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '["channel","subband"]'
+    num_opts: '0'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[i for i in range(2)]'
+    orient: Qt.QHBoxLayout
+    type: real
+    value: '0'
+    widget: radio_buttons
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 868.0]
+    rotation: 0
+    state: enabled
+- name: conf_section
+  id: variable
+  parameters:
+    comment: ''
+    value: '"subband" if channel_or_subband == 1 else "channel"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 868.0]
+    rotation: 0
+    state: enabled
+- name: dec0
+  id: variable
+  parameters:
+    comment: ''
+    value: n_chans
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [896, 420.0]
+    rotation: 0
+    state: enabled
+- name: dec0_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: xlate_rate/dec0
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [896, 484.0]
+    rotation: 0
+    state: enabled
+- name: fft_len
+  id: variable
+  parameters:
+    comment: ''
+    value: '8192'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 180.0]
+    rotation: 0
+    state: enabled
+- name: frac_bw
+  id: variable
+  parameters:
+    comment: ''
+    value: '0.45'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 132.0]
+    rotation: 0
+    state: enabled
+- name: freq
+  id: variable
+  parameters:
+    comment: "Center Frequency of \nyour Capture File"
+    value: 1534e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 116.0]
+    rotation: 0
+    state: enabled
+- name: freq_write
+  id: variable
+  parameters:
+    comment: "default variable \nwith value needed"
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [848, 116.0]
+    rotation: 0
+    state: enabled
+- name: half_band
+  id: variable
+  parameters:
+    comment: ''
+    value: int(fft_len//2)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1704, 196.0]
+    rotation: 0
+    state: enabled
+- name: half_subband
+  id: variable
+  parameters:
+    comment: ''
+    value: int(fft_len//n_chans//2)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1600, 196.0]
+    rotation: 0
+    state: enabled
+- name: n_chans
+  id: variable
+  parameters:
+    comment: ''
+    value: '9'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [896, 356.0]
+    rotation: 0
+    state: enabled
+- name: n_subbands
+  id: variable
+  parameters:
+    comment: ''
+    value: '5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 356.0]
+    rotation: 0
+    state: enabled
+- name: nphases
+  id: variable
+  parameters:
+    comment: ''
+    value: '32'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 132.0]
+    rotation: 0
+    state: enabled
+- name: out_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1208, 196.0]
+    rotation: 0
+    state: enabled
+- name: pass_band_bins
+  id: variable
+  parameters:
+    comment: ''
+    value: int(((dec0_rate/2)*0.1)/(samp_rate/fft_len))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1880, 196.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: Sample Rate of your Capture File
+    value: 1.92e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 4.0]
+    rotation: 0
+    state: disabled
+- name: samp_rate
+  id: variable_config
+  parameters:
+    comment: ''
+    config_file: /tmp/cband_hunter_config.conf
+    option: sample_rate
+    section: sdr_params
+    type: real
+    value: 2.16e6
+    writeback: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 1492.0]
+    rotation: 0
+    state: enabled
+- name: short_scaling
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:12,5,1,5
+    label: JAERO DIGITAL VOLUME
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '1'
+    step: '1'
+    stop: '65536'
+    value: '32768'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1736, 20.0]
+    rotation: 0
+    state: enabled
+- name: subband
+  id: variable
+  parameters:
+    comment: ''
+    value: int(fft_len/n_chans)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1800, 196.0]
+    rotation: 0
+    state: enabled
+- name: subband0_offset
+  id: variable_config
+  parameters:
+    comment: ''
+    config_file: /tmp/cband_hunter_config.conf
+    option: subband0_offset
+    section: subbands
+    type: real
+    value: (-xlate_rate/2)+subband_positions[1]*bin_size
+    writeback: subband_0
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 1348.0]
+    rotation: 0
+    state: enabled
+- name: subband0_pos
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:8,0,1,2
+    label: subband0_pos
+    min_len: '10'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: subband_positions[1]
+    step: '1'
+    stop: fft_len-half_subband
+    value: int((subband0_offset-(-xlate_rate/2))/bin_size)
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1824, 496.0]
+    rotation: 0
+    state: enabled
+- name: subband1_offset
+  id: variable_config
+  parameters:
+    comment: ''
+    config_file: /tmp/cband_hunter_config.conf
+    option: subband1_offset
+    section: subbands
+    type: real
+    value: (-xlate_rate/2)+subband_positions[3]*bin_size
+    writeback: subband_1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 1348.0]
+    rotation: 0
+    state: enabled
+- name: subband1_pos
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:8,2,1,2
+    label: subband1_pos
+    min_len: '10'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: subband_positions[1]
+    step: '1'
+    stop: fft_len-half_subband
+    value: int((subband1_offset-(-xlate_rate/2))/bin_size)
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1648, 848.0]
+    rotation: 0
+    state: enabled
+- name: subband2_offset
+  id: variable_config
+  parameters:
+    comment: ''
+    config_file: /tmp/cband_hunter_config.conf
+    option: subband2_offset
+    section: subbands
+    type: real
+    value: (-xlate_rate/2)+subband_positions[5]*bin_size
+    writeback: subband_2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 1348.0]
+    rotation: 0
+    state: enabled
+- name: subband2_pos
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:8,4,1,2
+    label: subband2_pos
+    min_len: '10'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: subband_positions[1]
+    step: '1'
+    stop: fft_len-half_subband
+    value: int((subband2_offset-(-xlate_rate/2))/bin_size)
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1808, 1192.0]
+    rotation: 0
+    state: enabled
+- name: subband2_pos_val
+  id: variable
+  parameters:
+    comment: ''
+    value: (-xlate_rate/2)+subband2_pos*bin_size
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 1260.0]
+    rotation: 0
+    state: enabled
+- name: subband3_offset
+  id: variable_config
+  parameters:
+    comment: ''
+    config_file: /tmp/cband_hunter_config.conf
+    option: subband3_offset
+    section: subbands
+    type: real
+    value: (-xlate_rate/2)+subband_positions[7]*bin_size
+    writeback: subband_3
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [648, 1348.0]
+    rotation: 0
+    state: enabled
+- name: subband3_pos
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:8,6,1,2
+    label: subband3_pos
+    min_len: '10'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: subband_positions[1]
+    step: '1'
+    stop: fft_len-half_subband
+    value: int((subband3_offset-(-xlate_rate/2))/bin_size)
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1632, 1536.0]
+    rotation: 0
+    state: enabled
+- name: subband4_offset
+  id: variable_config
+  parameters:
+    comment: ''
+    config_file: /tmp/cband_hunter_config.conf
+    option: subband4_offset
+    section: subbands
+    type: real
+    value: (-xlate_rate/2)+subband_positions[9]*bin_size
+    writeback: subband_4
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 1348.0]
+    rotation: 0
+    state: enabled
+- name: subband4_pos
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:8,8,1,2
+    label: subband4_pos
+    min_len: '10'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: subband_positions[1]
+    step: '1'
+    stop: fft_len-half_subband
+    value: int((subband4_offset-(-xlate_rate/2))/bin_size)
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1808, 1872.0]
+    rotation: 0
+    state: enabled
+- name: subband_0
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: tabs@0:9,0,1,1
+    label: ''
+    type: real
+    value: (-xlate_rate/2)+subband0_pos*bin_size
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 508.0]
+    rotation: 0
+    state: enabled
+- name: subband_1
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: tabs@0:9,2,1,1
+    label: ''
+    type: real
+    value: (-xlate_rate/2)+subband1_pos*bin_size
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 628.0]
+    rotation: 0
+    state: enabled
+- name: subband_2
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: tabs@0:9,4,1,1
+    label: ''
+    type: real
+    value: (-xlate_rate/2)+subband2_pos*bin_size
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 740.0]
+    rotation: 0
+    state: enabled
+- name: subband_3
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: tabs@0:9,6,1,1
+    label: ''
+    type: real
+    value: (-xlate_rate/2)+subband3_pos*bin_size
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 852.0]
+    rotation: 0
+    state: enabled
+- name: subband_4
+  id: variable_qtgui_label
+  parameters:
+    comment: ''
+    formatter: None
+    gui_hint: tabs@0:9,8,1,1
+    label: ''
+    type: real
+    value: (-xlate_rate/2)+subband4_pos*bin_size
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1032, 940.0]
+    rotation: 0
+    state: enabled
+- name: subband_positions
+  id: variable
+  parameters:
+    comment: ''
+    value: '[i for i in range(0,fft_len,half_subband*(n_chans//5))]'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1464, 196.0]
+    rotation: 0
+    state: enabled
+- name: subband_write
+  id: variable
+  parameters:
+    comment: ''
+    value: '"subband_"+str(write_subband_select)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 1124.0]
+    rotation: 0
+    state: enabled
+- name: subband_write_1
+  id: variable
+  parameters:
+    comment: ''
+    value: '"subband_"+str(write_subband_select)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [648, 1260.0]
+    rotation: 0
+    state: enabled
+- name: subband_write_2
+  id: variable
+  parameters:
+    comment: ''
+    value: '"subband_"+str(write_subband_select)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 1260.0]
+    rotation: 0
+    state: enabled
+- name: subband_write_3
+  id: variable
+  parameters:
+    comment: ''
+    value: '"subband_"+str(write_subband_select)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 1260.0]
+    rotation: 0
+    state: enabled
+- name: subband_write_4
+  id: variable
+  parameters:
+    comment: ''
+    value: '"subband_"+str(write_subband_select)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [168, 1260.0]
+    rotation: 0
+    state: enabled
+- name: variable_config_0
+  id: variable_config
+  parameters:
+    comment: ''
+    config_file: /tmp/cband_hunter_config.conf
+    option: write_freq_select_var
+    section: conf_section
+    type: real
+    value: '0'
+    writeback: freq_write
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 996.0]
+    rotation: 0
+    state: enabled
+- name: waterfall_max
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:10,0,1,5
+    label: waterfall max
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '-200'
+    step: '1'
+    stop: '0'
+    value: '-78'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [536, 60.0]
+    rotation: 0
+    state: true
+- name: waterfall_min
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: tabs@0:10,5,1,5
+    label: waterfall min
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '-200'
+    step: '1'
+    stop: '0'
+    value: '-90'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 60.0]
+    rotation: 0
+    state: true
+- name: write_freq_select
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Write Frequency to Conf
+    label0: ''
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '[str(i) for i in range(40)]'
+    num_opts: '0'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[i for i in range(40)]'
+    orient: Qt.QVBoxLayout
+    type: real
+    value: '0'
+    widget: combo_box
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [336, 996.0]
+    rotation: 0
+    state: enabled
+- name: write_freq_select_var
+  id: variable
+  parameters:
+    comment: ''
+    value: '"freq_"+str(write_freq_select) if channel_or_subband==0 else subband3_pos'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 932.0]
+    rotation: 0
+    state: enabled
+- name: write_subband_select
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Write Subband Freq to Conf
+    label0: ''
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '[str(i) for i in range(n_subbands)]'
+    num_opts: '0'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[i for i in range(n_subbands)]'
+    orient: Qt.QVBoxLayout
+    type: real
+    value: '0'
+    widget: combo_box
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 996.0]
+    rotation: 0
+    state: enabled
+- name: xlate_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [792, 420.0]
+    rotation: 0
+    state: enabled
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '3'
+    type: float
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2248, 1904.0]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '3'
+    type: float
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2232, 1552.0]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0_0_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '3'
+    type: float
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2240, 1208.0]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0_0_0_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '3'
+    type: float
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2232, 856.0]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0_0_0_0_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '3'
+    type: float
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2224, 512.0]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_mag_squared_0
+  id: blocks_complex_to_mag_squared
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1440, 292.0]
+    rotation: 0
+    state: enabled
+- name: blocks_moving_average_xx_0
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: fft_len//24
+    max_iter: fft_len//24
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: 1/(fft_len/24)
+    type: float
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1928, 268.0]
+    rotation: 0
+    state: true
+- name: blocks_msgpair_to_var_0
+  id: blocks_msgpair_to_var
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    target: freq_write
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 212.0]
+    rotation: 0
+    state: true
+- name: blocks_nlog10_ff_0
+  id: blocks_nlog10_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '-76'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: '20'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2240, 276.0]
+    rotation: 0
+    state: enabled
+- name: blocks_stream_to_vector_0
+  id: blocks_stream_to_vector
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: fft_len
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [840, 300.0]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 736.0]
+    rotation: 0
+    state: true
+- name: blocks_vector_source_x_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband0_pos-1)+[2000]+[-1000]*(half_band*2-subband0_pos)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 384.0]
+    rotation: 0
+    state: true
+- name: blocks_vector_source_x_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband0_pos+half_subband-pass_band_bins)+[2000]+[-1000]*(fft_len-subband0_pos-half_subband-1+pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 504.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband1_pos+half_subband-pass_band_bins)+[2000]+[-1000]*(fft_len-subband1_pos-half_subband-1+pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1784, 848.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband2_pos+half_subband-pass_band_bins)+[2000]+[-1000]*(fft_len-subband2_pos-half_subband-1+pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 1200.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband3_pos+half_subband-pass_band_bins)+[2000]+[-1000]*(fft_len-subband3_pos-half_subband-1+pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1784, 1544.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_0_0_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband4_pos+half_subband-pass_band_bins)+[2000]+[-1000]*(fft_len-subband4_pos-half_subband-1+pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 1896.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_1
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband0_pos-half_subband+pass_band_bins)+[2000]+[-1000]*(fft_len-subband0_pos+half_subband-1-pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 624.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_1_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband1_pos-half_subband+pass_band_bins)+[2000]+[-1000]*(fft_len-subband1_pos+half_subband-1-pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1784, 968.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_1_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband2_pos-half_subband+pass_band_bins)+[2000]+[-1000]*(fft_len-subband2_pos+half_subband-1-pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 1320.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_1_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband3_pos-half_subband+pass_band_bins)+[2000]+[-1000]*(fft_len-subband3_pos+half_subband-1-pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1784, 1664.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_1_0_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband4_pos-half_subband+pass_band_bins)+[2000]+[-1000]*(fft_len-subband4_pos+half_subband-1-pass_band_bins)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 2016.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_2
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband1_pos-1)+[2000]+[-1000]*(half_band*2-subband1_pos)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1784, 728.0]
+    rotation: 0
+    state: true
+- name: blocks_vector_source_x_0_2_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband2_pos-1)+[2000]+[-1000]*(half_band*2-subband2_pos)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 1080.0]
+    rotation: 0
+    state: true
+- name: blocks_vector_source_x_0_2_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband3_pos-1)+[2000]+[-1000]*(half_band*2-subband3_pos)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1784, 1424.0]
+    rotation: 0
+    state: enabled
+- name: blocks_vector_source_x_0_2_0_0_0
+  id: blocks_vector_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    repeat: 'True'
+    tags: '[]'
+    type: float
+    vector: '[-1000]*(subband4_pos-1)+[2000]+[-1000]*(half_band*2-subband4_pos)'
+    vlen: fft_len
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1952, 1776.0]
+    rotation: 0
+    state: enabled
+- name: fft_vxx_0
+  id: fft_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    fft_size: fft_len
+    forward: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nthreads: '1'
+    shift: 'True'
+    type: complex
+    window: window.blackmanharris(fft_len)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1128, 260.0]
+    rotation: 0
+    state: true
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [224, 100.0]
+    rotation: 0
+    state: true
+- name: qtgui_vector_sink_f_0
+  id: qtgui_vector_sink_f
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    color1: '"green"'
+    color10: '"dark red"'
+    color2: '"cyan"'
+    color3: '"magenta"'
+    color4: '"dark red"'
+    color5: '"dark green"'
+    color6: '"dark blue"'
+    color7: '"magenta"'
+    color8: '"dark red"'
+    color9: '"dark red"'
+    comment: ''
+    grid: 'False'
+    gui_hint: tabs@0:0,0,1,10
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '6'
+    ref_level: '0'
+    showports: 'False'
+    update_time: '0.01'
+    vlen: fft_len
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    x_axis_label: '""'
+    x_start: '0'
+    x_step: '1.0'
+    x_units: '""'
+    y_axis_label: '""'
+    y_units: '""'
+    ymax: '-60'
+    ymin: '-100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [2728, 864.0]
+    rotation: 0
+    state: true
+- name: qtgui_waterfall_sink_x_0
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'False'
+    bw: samp_rate
+    color1: '1'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '16384'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: tabs@0:2,0,1,10
+    int_max: waterfall_max
+    int_min: waterfall_min
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.01'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 192.0]
+    rotation: 0
+    state: true
+- name: snippet_0
+  id: snippet
+  parameters:
+    alias: ''
+    code: 'from pathlib import Path
+
+      fle = Path(''/tmp/cband_hunter_config.conf'')
+
+      fle.touch(exist_ok=True)'
+    comment: ''
+    priority: '0'
+    section: main_after_init
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 1140.0]
+    rotation: 0
+    state: true
+- name: sub_wtf0
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'False'
+    bw: dec0_rate
+    color1: '1'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: tabs@0:6,0,2,2
+    int_max: waterfall_max
+    int_min: waterfall_min
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"subband0"'
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.01'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 580.0]
+    rotation: 0
+    state: true
+- name: sub_wtf1
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'False'
+    bw: dec0_rate
+    color1: '1'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: tabs@0:6,2,2,2
+    int_max: waterfall_max
+    int_min: waterfall_min
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"subband1"'
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.01'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 692.0]
+    rotation: 0
+    state: true
+- name: sub_wtf2
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'False'
+    bw: dec0_rate
+    color1: '1'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: tabs@0:6,4,2,2
+    int_max: waterfall_max
+    int_min: waterfall_min
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"subband2"'
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.01'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 804.0]
+    rotation: 0
+    state: enabled
+- name: sub_wtf3
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'False'
+    bw: dec0_rate
+    color1: '1'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: tabs@0:6,6,2,2
+    int_max: waterfall_max
+    int_min: waterfall_min
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"subband3"'
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.01'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 916.0]
+    rotation: 0
+    state: enabled
+- name: sub_wtf4
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'False'
+    bw: dec0_rate
+    color1: '1'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '2048'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: tabs@0:6,8,2,2
+    int_max: waterfall_max
+    int_min: waterfall_min
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"subband4"'
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.01'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 1028.0]
+    rotation: 0
+    state: enabled
+- name: tabs
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: 0,0,12,10
+    label0: RF Spectrum
+    label1: JAERO CHANNELS
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: Tab 2
+    label3: Tab 3
+    label4: Tab 4
+    label5: Tab 5
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 236.0]
+    rotation: 0
+    state: true
+- name: xmlrpc_client_0
+  id: xmlrpc_client
+  parameters:
+    addr: localhost
+    alias: ''
+    callback: set_subband0_pos
+    comment: ''
+    port: '9000'
+    variable: subband0_pos
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1528, 508.0]
+    rotation: 0
+    state: true
+- name: xmlrpc_client_0_0
+  id: xmlrpc_client
+  parameters:
+    addr: localhost
+    alias: ''
+    callback: set_subband1_pos
+    comment: ''
+    port: '9000'
+    variable: subband1_pos
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1544, 628.0]
+    rotation: 0
+    state: true
+- name: xmlrpc_client_0_1
+  id: xmlrpc_client
+  parameters:
+    addr: localhost
+    alias: ''
+    callback: set_subband_2
+    comment: ''
+    port: '9000'
+    variable: subband_2
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1536, 1012.0]
+    rotation: 0
+    state: true
+- name: xmlrpc_client_0_2
+  id: xmlrpc_client
+  parameters:
+    addr: localhost
+    alias: ''
+    callback: set_subband3_pos
+    comment: ''
+    port: '9000'
+    variable: subband3_pos
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1520, 1148.0]
+    rotation: 0
+    state: true
+- name: xmlrpc_client_0_3
+  id: xmlrpc_client
+  parameters:
+    addr: localhost
+    alias: ''
+    callback: set_subband4_pos
+    comment: ''
+    port: '9000'
+    variable: subband4_pos
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1520, 1308.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5000
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'True'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 712.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5002
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'True'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 1116.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0_0_0
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5001
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'True'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 996.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0_1
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5003
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'True'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 1228.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0_2
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5005
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'True'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 1452.0]
+    rotation: 0
+    state: true
+- name: zeromq_sub_source_0_3
+  id: zeromq_sub_source
+  parameters:
+    address: tcp://127.0.0.1:5004
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    pass_tags: 'True'
+    timeout: '100'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 1340.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_add_xx_0, '0', qtgui_vector_sink_f_0, '5']
+- [blocks_add_xx_0_0, '0', qtgui_vector_sink_f_0, '4']
+- [blocks_add_xx_0_0_0, '0', qtgui_vector_sink_f_0, '3']
+- [blocks_add_xx_0_0_0_0, '0', qtgui_vector_sink_f_0, '2']
+- [blocks_add_xx_0_0_0_0_0, '0', qtgui_vector_sink_f_0, '1']
+- [blocks_complex_to_mag_squared_0, '0', blocks_moving_average_xx_0, '0']
+- [blocks_moving_average_xx_0, '0', blocks_nlog10_ff_0, '0']
+- [blocks_nlog10_ff_0, '0', qtgui_vector_sink_f_0, '0']
+- [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
+- [blocks_throttle_0, '0', blocks_stream_to_vector_0, '0']
+- [blocks_throttle_0, '0', qtgui_waterfall_sink_x_0, '0']
+- [blocks_vector_source_x_0, '0', blocks_add_xx_0_0_0_0_0, '0']
+- [blocks_vector_source_x_0_0, '0', blocks_add_xx_0_0_0_0_0, '1']
+- [blocks_vector_source_x_0_0_0, '0', blocks_add_xx_0_0_0_0, '1']
+- [blocks_vector_source_x_0_0_0_0, '0', blocks_add_xx_0_0_0, '1']
+- [blocks_vector_source_x_0_0_0_0_0, '0', blocks_add_xx_0_0, '1']
+- [blocks_vector_source_x_0_0_0_0_0_0, '0', blocks_add_xx_0, '1']
+- [blocks_vector_source_x_0_1, '0', blocks_add_xx_0_0_0_0_0, '2']
+- [blocks_vector_source_x_0_1_0, '0', blocks_add_xx_0_0_0_0, '2']
+- [blocks_vector_source_x_0_1_0_0, '0', blocks_add_xx_0_0_0, '2']
+- [blocks_vector_source_x_0_1_0_0_0, '0', blocks_add_xx_0_0, '2']
+- [blocks_vector_source_x_0_1_0_0_0_0, '0', blocks_add_xx_0, '2']
+- [blocks_vector_source_x_0_2, '0', blocks_add_xx_0_0_0_0, '0']
+- [blocks_vector_source_x_0_2_0, '0', blocks_add_xx_0_0_0, '0']
+- [blocks_vector_source_x_0_2_0_0, '0', blocks_add_xx_0_0, '0']
+- [blocks_vector_source_x_0_2_0_0_0, '0', blocks_add_xx_0, '0']
+- [fft_vxx_0, '0', blocks_complex_to_mag_squared_0, '0']
+- [qtgui_waterfall_sink_x_0, freq, blocks_msgpair_to_var_0, inpair]
+- [zeromq_sub_source_0, '0', blocks_throttle_0, '0']
+- [zeromq_sub_source_0_0, '0', sub_wtf1, '0']
+- [zeromq_sub_source_0_0_0, '0', sub_wtf0, '0']
+- [zeromq_sub_source_0_1, '0', sub_wtf2, '0']
+- [zeromq_sub_source_0_2, '0', sub_wtf4, '0']
+- [zeromq_sub_source_0_3, '0', sub_wtf3, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.2.0-rc1
