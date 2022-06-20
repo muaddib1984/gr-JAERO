@@ -41,8 +41,22 @@ tuned in properly, you can run multiple jaero instances with the command:
 jaero -s [name of instance]
 the topic fields in the flowgraph are not fully worked out, 
 they are 'oneone, twotwo, threethree,etc.' The topic fields aren't really
-necessary here as each channel operates on one ZMQ Port.
+necessary here as each channel operates on one ZMQ Port, but they are still
+required as JAERO needs to see the right topic. 
 
-I will update this with better instructions at some point. 
+For operating all 5 subbands repeat the instructions above for the 
+subband channelizer graphs:
+For each subband, change the '-P 5001' to 5002,5003,5004 or 5005
+These port numbers correspond to the 5 subband I/Q streams.
+For each subband, run a subband channelizer (and GUI) but change the 
+-W flag to be 7016,7032,7048,7064 and the -J flag to 6016,6032,6048,6064
+These numbers are the port numbers for the internal routing of channelized
+channel I/Q to waterfalls in the GUI flowgraphs (-W) and the individual
+JAERO instances (-J), so JAERO will need to see the correct ports and topics.
+As mentioned above, topics are stil not streamlined, so each channelizer
+will have the same topics 'oneone,twotwo,...,fourteen,fifteen' even though 
+the ZMQ Ports may be different. 
+
+I will do my best to update this with better instructions at some point. 
 
 
