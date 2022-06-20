@@ -1,0 +1,6 @@
+THIS IS HIGHLY EXPERIMENTAL
+Fixed Sample Rate 2.16Msps
+It is assumed you are using a downshifted source for C-Band (like the Titanium C1WPLL)
+The ZMQ input can be provided with a publisher from my STILLSUIT project
+https://github.com/muaddib1984/STILLSUIT
+run STILLSUIT for your radio of choice (USRP,RTL-SDR, etc)
