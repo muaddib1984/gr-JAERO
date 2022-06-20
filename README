@@ -10,7 +10,10 @@ Once running, stillsuit will publish the I/Q on port 5000
 
 C-Band Hunter is comprised of standalone modular components as well as modular.
 The aim was to provide a standalone app to confirm that the signals are being
-seen properly and JAERO can decode the channels.
+seen properly and JAERO can decode the channels. The modular approach allows 
+the user to tune in all 5 subbands visually and then close the GUI windows 
+for headless operation. Currently the modular core app still has a small GUI 
+window for the JAERO input Volume control that is non-functional at this time.
 
 STANDALONE:
 In the gr-JAERO/apps directory open the JAERO_ZMQ_CBAND_Hunter_core.grc in
