@@ -30,7 +30,7 @@ python code
 cd into the cband_hunter_modular directoy in a terminal adn run:
     python3 JAERO_ZMQ_CBAND_Hunter_core_subbands.py
     python3 JAERO_ZMQ_CBAND_Hunter_subband_channelizer.py -P 5001 -J 6001 -W 7001
-    python3 JAERO_ZMQ_CBAND_Hunter_subband_channelizer_GUI.py -P 5001 -W 7001
+    python3 ../JAERO_ZMQ_CBAND_Hunter_subband_channelizer_GUI.py -P 5001 -W 7001
     python3 JAERO_ZMQ_CBAND_Hunter_GUI.py
 You should see spectrum in the main GUI and have the ability to adjust 
 subband0. If you are seeing C-Band burst signals, adjust the position for 
