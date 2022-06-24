@@ -974,7 +974,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1360, 404.0]
+    coordinate: [1344, 484.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0_0
@@ -994,7 +994,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1352, 540.0]
+    coordinate: [1344, 604.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0_0_0
@@ -1034,7 +1034,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1352, 692.0]
+    coordinate: [1344, 724.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0_0_2
@@ -1054,7 +1054,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1344, 820.0]
+    coordinate: [1336, 860.0]
     rotation: 0
     state: true
 - name: zeromq_sub_source_0
