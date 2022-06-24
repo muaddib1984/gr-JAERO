@@ -249,7 +249,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1208, 196.0]
+    coordinate: [1192, 180.0]
     rotation: 0
     state: enabled
 - name: pass_band_bins
@@ -617,7 +617,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1464, 196.0]
+    coordinate: [1448, 196.0]
     rotation: 0
     state: enabled
 - name: subband_write
@@ -1882,10 +1882,10 @@ blocks:
   parameters:
     addr: localhost
     alias: ''
-    callback: set_subband_2
+    callback: set_subband2_pos
     comment: ''
     port: '9000'
-    variable: subband_2
+    variable: subband2_pos
   states:
     bus_sink: false
     bus_source: false
