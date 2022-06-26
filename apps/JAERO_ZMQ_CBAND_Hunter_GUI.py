@@ -158,7 +158,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.subband_0 = subband_0 = (-xlate_rate/2)+subband0_pos*bin_size
         self.subband2_pos_val = subband2_pos_val = (-xlate_rate/2)+subband2_pos*bin_size
         self.subband = subband = int(fft_len/n_chans)
-        self.short_scaling = short_scaling = 32768
         self.pass_band_bins = pass_band_bins = int(((dec0_rate/2)*0.1)/(samp_rate/fft_len))
         self.out_rate = out_rate = 48000
         self.nphases = nphases = 32
@@ -167,7 +166,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.freq_write = freq_write = 0
         self.freq = freq = 1534e6
         self.frac_bw = frac_bw = 0.45
-        self.audio_volume = audio_volume = 100.0
 
         ##################################################
         # Blocks
@@ -550,13 +548,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
             self.tabs_grid_layout_0.setRowStretch(r, 1)
         for c in range(0, 2):
             self.tabs_grid_layout_0.setColumnStretch(c, 1)
-        self._short_scaling_range = Range(1, 65536, 1, 32768, 200)
-        self._short_scaling_win = RangeWidget(self._short_scaling_range, self.set_short_scaling, "JAERO DIGITAL VOLUME", "counter_slider", int, QtCore.Qt.Horizontal)
-        self.tabs_grid_layout_0.addWidget(self._short_scaling_win, 12, 5, 1, 5)
-        for r in range(12, 13):
-            self.tabs_grid_layout_0.setRowStretch(r, 1)
-        for c in range(5, 10):
-            self.tabs_grid_layout_0.setColumnStretch(c, 1)
         self.qtgui_waterfall_sink_x_0 = qtgui.waterfall_sink_c(
             16384, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
@@ -692,13 +683,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.blocks_add_xx_0_0_0 = blocks.add_vff(fft_len)
         self.blocks_add_xx_0_0 = blocks.add_vff(fft_len)
         self.blocks_add_xx_0 = blocks.add_vff(fft_len)
-        self._audio_volume_range = Range(0.1, 1000, 0.1, 100.0, 200)
-        self._audio_volume_win = RangeWidget(self._audio_volume_range, self.set_audio_volume, "Audio Signal Volume", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.tabs_grid_layout_0.addWidget(self._audio_volume_win, 12, 0, 1, 5)
-        for r in range(12, 13):
-            self.tabs_grid_layout_0.setRowStretch(r, 1)
-        for c in range(0, 5):
-            self.tabs_grid_layout_0.setColumnStretch(c, 1)
 
 
         ##################################################
@@ -1172,12 +1156,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
     def set_subband(self, subband):
         self.subband = subband
 
-    def get_short_scaling(self):
-        return self.short_scaling
-
-    def set_short_scaling(self, short_scaling):
-        self.short_scaling = short_scaling
-
     def get_pass_band_bins(self):
         return self.pass_band_bins
 
@@ -1246,12 +1224,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
 
     def set_frac_bw(self, frac_bw):
         self.frac_bw = frac_bw
-
-    def get_audio_volume(self):
-        return self.audio_volume
-
-    def set_audio_volume(self, audio_volume):
-        self.audio_volume = audio_volume
 
 
 

@@ -2392,6 +2392,20 @@ blocks:
     coordinate: [3200, 188.0]
     rotation: 0
     state: true
+- name: xmlrpc_server_0
+  id: xmlrpc_server
+  parameters:
+    addr: localhost
+    alias: ''
+    comment: ''
+    port: '9001'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 212.0]
+    rotation: 0
+    state: true
 - name: zeromq_pub_sink_0
   id: zeromq_pub_sink
   parameters:

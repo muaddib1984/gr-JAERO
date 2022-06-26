@@ -25,6 +25,8 @@ from gnuradio import eng_notation
 from gnuradio import zeromq
 from gnuradio.filter import pfb
 from pfb_out_to_jaero_zmq import pfb_out_to_jaero_zmq  # grc-generated hier_block
+from xmlrpc.server import SimpleXMLRPCServer
+import threading
 import JAERO
 import math
 
@@ -97,6 +99,11 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         self.zeromq_pub_sink_0_0_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[9]), 100, True, -1, '')
         self.zeromq_pub_sink_0_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[1]), 100, True, -1, '')
         self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[0]), 100, True, -1, '')
+        self.xmlrpc_server_0 = SimpleXMLRPCServer(('localhost', 9001), allow_none=True)
+        self.xmlrpc_server_0.register_instance(self)
+        self.xmlrpc_server_0_thread = threading.Thread(target=self.xmlrpc_server_0.serve_forever)
+        self.xmlrpc_server_0_thread.daemon = True
+        self.xmlrpc_server_0_thread.start()
         self.pfb_out_to_jaero_zmq_0_4 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
             audio_volume=audio_volume,

@@ -53,7 +53,7 @@ blocks:
     bus_structure: null
     coordinate: [1576, 20.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: bin_size
   id: variable
   parameters:
@@ -313,7 +313,7 @@ blocks:
     bus_structure: null
     coordinate: [1736, 20.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: subband
   id: variable
   parameters:

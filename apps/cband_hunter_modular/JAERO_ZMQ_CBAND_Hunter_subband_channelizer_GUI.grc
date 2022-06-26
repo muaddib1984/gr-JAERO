@@ -82,7 +82,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1704, 244.0]
+    coordinate: [1744, 196.0]
     rotation: 0
     state: enabled
 - name: chan_rate
@@ -1589,6 +1589,22 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [832, 556.0]
+    rotation: 0
+    state: true
+- name: xmlrpc_client_0
+  id: xmlrpc_client
+  parameters:
+    addr: localhost
+    alias: ''
+    callback: set_audio_volume
+    comment: ''
+    port: '9001'
+    variable: audio_volume
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1576, 148.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0

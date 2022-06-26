@@ -37,6 +37,7 @@ from gnuradio import eng_notation
 from gnuradio import zeromq
 from gnuradio.qtgui import Range, RangeWidget
 from PyQt5 import QtCore
+from xmlrpc.client import ServerProxy
 import math
 
 
@@ -167,6 +168,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer_GUI(gr.top_block, Qt.QWidget):
         self.zeromq_sub_source_0_0_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[1]), 100, True, -1, '')
         self.zeromq_sub_source_0_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[0]), 100, True, -1, '')
         self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(zmq_port), 100, True, -1, '')
+        self.xmlrpc_client_0 = ServerProxy('http://'+'localhost'+':9001')
         self.sub_wtf4_0 = qtgui.waterfall_sink_c(
             1024, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
@@ -1114,6 +1116,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer_GUI(gr.top_block, Qt.QWidget):
 
     def set_audio_volume(self, audio_volume):
         self.audio_volume = audio_volume
+        self.xmlrpc_client_0.set_audio_volume(self.audio_volume)
 
 
 
