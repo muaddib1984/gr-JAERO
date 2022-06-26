@@ -37,7 +37,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: tabs@0:12,0,1,5
+    gui_hint: tabs@0:11,0,1,5
     label: Audio Signal Volume
     min_len: '200'
     orient: QtCore.Qt.Horizontal
@@ -377,7 +377,7 @@ blocks:
   id: variable_qtgui_range
   parameters:
     comment: ''
-    gui_hint: tabs@0:12,5,1,5
+    gui_hint: tabs@0:11,5,1,5
     label: JAERO DIGITAL VOLUME
     min_len: '200'
     orient: QtCore.Qt.Horizontal

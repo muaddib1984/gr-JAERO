@@ -54,6 +54,18 @@ blocks:
     coordinate: [1576, 20.0]
     rotation: 0
     state: disabled
+- name: audio_volume
+  id: variable
+  parameters:
+    comment: ''
+    value: '100.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1600, 148.0]
+    rotation: 0
+    state: enabled
 - name: bin_size
   id: variable
   parameters:
@@ -447,22 +459,6 @@ blocks:
     coordinate: [1368, 20.0]
     rotation: 0
     state: enabled
-- name: variable_qtgui_label_0
-  id: variable_qtgui_label
-  parameters:
-    comment: ''
-    formatter: None
-    gui_hint: 0,0,1,1
-    label: ZMQ SUBBAND INPUT
-    type: int
-    value: zmq_port
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1576, 148.0]
-    rotation: 0
-    state: disabled
 - name: waterfall_max
   id: variable_qtgui_range
   parameters:
@@ -980,7 +976,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1000,7 +996,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1020,7 +1016,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1040,7 +1036,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1060,7 +1056,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1080,7 +1076,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1100,7 +1096,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1120,7 +1116,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1140,7 +1136,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1160,7 +1156,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1180,7 +1176,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1200,7 +1196,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1220,7 +1216,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1240,7 +1236,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1260,7 +1256,7 @@ blocks:
     affinity: ''
     alias: ''
     audio_rate: 48e3
-    audio_volume: '100.0'
+    audio_volume: audio_volume
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'

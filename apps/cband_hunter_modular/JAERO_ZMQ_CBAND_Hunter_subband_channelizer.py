@@ -76,6 +76,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         self.chan_rate = chan_rate = 10.5e3
         self.bpf = bpf = firdes.complex_band_pass(1.0, out_rate, (usb_bw)*0.05, (usb_bw)*0.95, (usb_bw)*0.05, window.WIN_HAMMING, 6.76)
         self.bin_size = bin_size = (samp_rate/fft_len)
+        self.audio_volume = audio_volume = 100.0
 
         ##################################################
         # Blocks
@@ -98,105 +99,105 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[0]), 100, True, -1, '')
         self.pfb_out_to_jaero_zmq_0_4 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_3_0_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_3_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_3 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_2_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_2 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_1_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_1 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_0_2 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_0_1_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_0_1 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_0_0_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_0_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
         )
         self.pfb_out_to_jaero_zmq_0 = pfb_out_to_jaero_zmq(
             audio_rate=48e3,
-            audio_volume=100.0,
+            audio_volume=audio_volume,
             pfb_out_rate=pfb_out_rate,
             short_scaling=short_scaling,
             usb_bw=usb_bw,
@@ -565,6 +566,27 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
 
     def set_bin_size(self, bin_size):
         self.bin_size = bin_size
+
+    def get_audio_volume(self):
+        return self.audio_volume
+
+    def set_audio_volume(self, audio_volume):
+        self.audio_volume = audio_volume
+        self.pfb_out_to_jaero_zmq_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_0_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_0_0_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_0_1.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_0_1_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_0_2.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_1.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_1_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_2.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_2_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_3.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_3_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_3_0_0.set_audio_volume(self.audio_volume)
+        self.pfb_out_to_jaero_zmq_0_4.set_audio_volume(self.audio_volume)
 
 
 
