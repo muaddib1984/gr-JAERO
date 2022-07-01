@@ -23,7 +23,6 @@ if __name__ == '__main__':
             print("Warning: failed to XInitThreads()")
 
 from PyQt5 import Qt
-from PyQt5.QtCore import QObject, pyqtSlot
 from gnuradio import eng_notation
 from gnuradio import qtgui
 from gnuradio.filter import firdes
@@ -102,18 +101,16 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.xlate_rate = xlate_rate = samp_rate
         self.subband_positions = subband_positions = [i for i in range(0,fft_len,half_subband*(n_chans//5))]
         self.bin_size = bin_size = (samp_rate/fft_len)
-        self._subband3_offset_config = configparser.ConfigParser()
-        self._subband3_offset_config.read('/tmp/cband_hunter_config.conf')
-        try: subband3_offset = self._subband3_offset_config.getfloat('subbands', 'subband3_offset')
-        except: subband3_offset = (-xlate_rate/2)+subband_positions[7]*bin_size
-        self.subband3_offset = subband3_offset
-        self.write_freq_select = write_freq_select = 0
         self._subband4_offset_config = configparser.ConfigParser()
         self._subband4_offset_config.read('/tmp/cband_hunter_config.conf')
         try: subband4_offset = self._subband4_offset_config.getfloat('subbands', 'subband4_offset')
         except: subband4_offset = (-xlate_rate/2)+subband_positions[9]*bin_size
         self.subband4_offset = subband4_offset
-        self.subband3_pos = subband3_pos = int((subband3_offset-(-xlate_rate/2))/bin_size)
+        self._subband3_offset_config = configparser.ConfigParser()
+        self._subband3_offset_config.read('/tmp/cband_hunter_config.conf')
+        try: subband3_offset = self._subband3_offset_config.getfloat('subbands', 'subband3_offset')
+        except: subband3_offset = (-xlate_rate/2)+subband_positions[7]*bin_size
+        self.subband3_offset = subband3_offset
         self._subband2_offset_config = configparser.ConfigParser()
         self._subband2_offset_config.read('/tmp/cband_hunter_config.conf')
         try: subband2_offset = self._subband2_offset_config.getfloat('subbands', 'subband2_offset')
@@ -130,33 +127,19 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         except: subband0_offset = (-xlate_rate/2)+subband_positions[1]*bin_size
         self.subband0_offset = subband0_offset
         self.dec0 = dec0 = n_chans
-        self.channel_or_subband = channel_or_subband = 0
-        self.write_subband_select = write_subband_select = 0
-        self.write_freq_select_var = write_freq_select_var = "freq_"+str(write_freq_select) if channel_or_subband==0 else subband3_pos
         self.subband4_pos = subband4_pos = int((subband4_offset-(-xlate_rate/2))/bin_size)
+        self.subband3_pos = subband3_pos = int((subband3_offset-(-xlate_rate/2))/bin_size)
         self.subband2_pos = subband2_pos = int((subband2_offset-(-xlate_rate/2))/bin_size)
         self.subband1_pos = subband1_pos = int((subband1_offset-(-xlate_rate/2))/bin_size)
         self.subband0_pos = subband0_pos = int((subband0_offset-(-xlate_rate/2))/bin_size)
         self.dec0_rate = dec0_rate = xlate_rate/dec0
-        self.conf_section = conf_section = "subband" if channel_or_subband == 1 else "channel"
         self.waterfall_min = waterfall_min = -90
         self.waterfall_max = waterfall_max = -78
-        self._variable_config_0_config = configparser.ConfigParser()
-        self._variable_config_0_config.read('/tmp/cband_hunter_config.conf')
-        try: variable_config_0 = self._variable_config_0_config.getfloat(conf_section, write_freq_select_var)
-        except: variable_config_0 = 0
-        self.variable_config_0 = variable_config_0
-        self.subband_write_4 = subband_write_4 = "subband_"+str(write_subband_select)
-        self.subband_write_3 = subband_write_3 = "subband_"+str(write_subband_select)
-        self.subband_write_2 = subband_write_2 = "subband_"+str(write_subband_select)
-        self.subband_write_1 = subband_write_1 = "subband_"+str(write_subband_select)
-        self.subband_write = subband_write = "subband_"+str(write_subband_select)
         self.subband_4 = subband_4 = (-xlate_rate/2)+subband4_pos*bin_size
         self.subband_3 = subband_3 = (-xlate_rate/2)+subband3_pos*bin_size
         self.subband_2 = subband_2 = (-xlate_rate/2)+subband2_pos*bin_size
         self.subband_1 = subband_1 = (-xlate_rate/2)+subband1_pos*bin_size
         self.subband_0 = subband_0 = (-xlate_rate/2)+subband0_pos*bin_size
-        self.subband2_pos_val = subband2_pos_val = (-xlate_rate/2)+subband2_pos*bin_size
         self.subband = subband = int(fft_len/n_chans)
         self.pass_band_bins = pass_band_bins = int(((dec0_rate/2)*0.1)/(samp_rate/fft_len))
         self.out_rate = out_rate = 48000
@@ -176,11 +159,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.tabs_grid_layout_0 = Qt.QGridLayout()
         self.tabs_layout_0.addLayout(self.tabs_grid_layout_0)
         self.tabs.addTab(self.tabs_widget_0, 'RF Spectrum')
-        self.tabs_widget_1 = Qt.QWidget()
-        self.tabs_layout_1 = Qt.QBoxLayout(Qt.QBoxLayout.TopToBottom, self.tabs_widget_1)
-        self.tabs_grid_layout_1 = Qt.QGridLayout()
-        self.tabs_layout_1.addLayout(self.tabs_grid_layout_1)
-        self.tabs.addTab(self.tabs_widget_1, 'JAERO CHANNELS')
         self.top_grid_layout.addWidget(self.tabs, 0, 0, 12, 10)
         for r in range(0, 12):
             self.top_grid_layout.setRowStretch(r, 1)
@@ -246,38 +224,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.xmlrpc_client_0_1 = ServerProxy('http://'+'localhost'+':9000')
         self.xmlrpc_client_0_0 = ServerProxy('http://'+'localhost'+':9000')
         self.xmlrpc_client_0 = ServerProxy('http://'+'localhost'+':9000')
-        # Create the options list
-        self._write_subband_select_options = [0, 1, 2, 3, 4]
-        # Create the labels list
-        self._write_subband_select_labels = ['0', '1', '2', '3', '4']
-        # Create the combo box
-        self._write_subband_select_tool_bar = Qt.QToolBar(self)
-        self._write_subband_select_tool_bar.addWidget(Qt.QLabel("Write Subband Freq to Conf" + ": "))
-        self._write_subband_select_combo_box = Qt.QComboBox()
-        self._write_subband_select_tool_bar.addWidget(self._write_subband_select_combo_box)
-        for _label in self._write_subband_select_labels: self._write_subband_select_combo_box.addItem(_label)
-        self._write_subband_select_callback = lambda i: Qt.QMetaObject.invokeMethod(self._write_subband_select_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._write_subband_select_options.index(i)))
-        self._write_subband_select_callback(self.write_subband_select)
-        self._write_subband_select_combo_box.currentIndexChanged.connect(
-            lambda i: self.set_write_subband_select(self._write_subband_select_options[i]))
-        # Create the radio buttons
-        self.top_layout.addWidget(self._write_subband_select_tool_bar)
-        # Create the options list
-        self._write_freq_select_options = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
-        # Create the labels list
-        self._write_freq_select_labels = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39']
-        # Create the combo box
-        self._write_freq_select_tool_bar = Qt.QToolBar(self)
-        self._write_freq_select_tool_bar.addWidget(Qt.QLabel("Write Frequency to Conf" + ": "))
-        self._write_freq_select_combo_box = Qt.QComboBox()
-        self._write_freq_select_tool_bar.addWidget(self._write_freq_select_combo_box)
-        for _label in self._write_freq_select_labels: self._write_freq_select_combo_box.addItem(_label)
-        self._write_freq_select_callback = lambda i: Qt.QMetaObject.invokeMethod(self._write_freq_select_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._write_freq_select_options.index(i)))
-        self._write_freq_select_callback(self.write_freq_select)
-        self._write_freq_select_combo_box.currentIndexChanged.connect(
-            lambda i: self.set_write_freq_select(self._write_freq_select_options[i]))
-        # Create the radio buttons
-        self.top_layout.addWidget(self._write_freq_select_tool_bar)
         self._subband_4_tool_bar = Qt.QToolBar(self)
 
         if None:
@@ -632,31 +578,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         for c in range(0, 10):
             self.tabs_grid_layout_0.setColumnStretch(c, 1)
         self.fft_vxx_0 = fft.fft_vcc(fft_len, True, window.blackmanharris(fft_len), True, 1)
-        # Create the options list
-        self._channel_or_subband_options = [0, 1]
-        # Create the labels list
-        self._channel_or_subband_labels = ['channel', 'subband']
-        # Create the combo box
-        # Create the radio buttons
-        self._channel_or_subband_group_box = Qt.QGroupBox("Channel or Subband" + ": ")
-        self._channel_or_subband_box = Qt.QHBoxLayout()
-        class variable_chooser_button_group(Qt.QButtonGroup):
-            def __init__(self, parent=None):
-                Qt.QButtonGroup.__init__(self, parent)
-            @pyqtSlot(int)
-            def updateButtonChecked(self, button_id):
-                self.button(button_id).setChecked(True)
-        self._channel_or_subband_button_group = variable_chooser_button_group()
-        self._channel_or_subband_group_box.setLayout(self._channel_or_subband_box)
-        for i, _label in enumerate(self._channel_or_subband_labels):
-            radio_button = Qt.QRadioButton(_label)
-            self._channel_or_subband_box.addWidget(radio_button)
-            self._channel_or_subband_button_group.addButton(radio_button, i)
-        self._channel_or_subband_callback = lambda i: Qt.QMetaObject.invokeMethod(self._channel_or_subband_button_group, "updateButtonChecked", Qt.Q_ARG("int", self._channel_or_subband_options.index(i)))
-        self._channel_or_subband_callback(self.channel_or_subband)
-        self._channel_or_subband_button_group.buttonClicked[int].connect(
-            lambda i: self.set_channel_or_subband(self._channel_or_subband_options[i]))
-        self.top_layout.addWidget(self._channel_or_subband_group_box)
         self.blocks_vector_source_x_0_2_0_0_0 = blocks.vector_source_f([-1000]*(subband4_pos-1)+[2000]+[-1000]*(half_band*2-subband4_pos), True, fft_len, [])
         self.blocks_vector_source_x_0_2_0_0 = blocks.vector_source_f([-1000]*(subband3_pos-1)+[2000]+[-1000]*(half_band*2-subband3_pos), True, fft_len, [])
         self.blocks_vector_source_x_0_2_0 = blocks.vector_source_f([-1000]*(subband2_pos-1)+[2000]+[-1000]*(half_band*2-subband2_pos), True, fft_len, [])
@@ -811,7 +732,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.set_subband1_pos(int((self.subband1_offset-(-self.xlate_rate/2))/self.bin_size))
         self.set_subband2_offset((-self.xlate_rate/2)+self.subband_positions[5]*self.bin_size)
         self.set_subband2_pos(int((self.subband2_offset-(-self.xlate_rate/2))/self.bin_size))
-        self.set_subband2_pos_val((-self.xlate_rate/2)+self.subband2_pos*self.bin_size)
         self.set_subband3_offset((-self.xlate_rate/2)+self.subband_positions[7]*self.bin_size)
         self.set_subband3_pos(int((self.subband3_offset-(-self.xlate_rate/2))/self.bin_size))
         self.set_subband4_offset((-self.xlate_rate/2)+self.subband_positions[9]*self.bin_size)
@@ -844,7 +764,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.set_subband1_pos(int((self.subband1_offset-(-self.xlate_rate/2))/self.bin_size))
         self.set_subband2_offset((-self.xlate_rate/2)+self.subband_positions[5]*self.bin_size)
         self.set_subband2_pos(int((self.subband2_offset-(-self.xlate_rate/2))/self.bin_size))
-        self.set_subband2_pos_val((-self.xlate_rate/2)+self.subband2_pos*self.bin_size)
         self.set_subband3_offset((-self.xlate_rate/2)+self.subband_positions[7]*self.bin_size)
         self.set_subband3_pos(int((self.subband3_offset-(-self.xlate_rate/2))/self.bin_size))
         self.set_subband4_offset((-self.xlate_rate/2)+self.subband_positions[9]*self.bin_size)
@@ -855,21 +774,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.set_subband_3((-self.xlate_rate/2)+self.subband3_pos*self.bin_size)
         self.set_subband_4((-self.xlate_rate/2)+self.subband4_pos*self.bin_size)
 
-    def get_subband3_offset(self):
-        return self.subband3_offset
-
-    def set_subband3_offset(self, subband3_offset):
-        self.subband3_offset = subband3_offset
-        self.set_subband3_pos(int((self.subband3_offset-(-self.xlate_rate/2))/self.bin_size))
-
-    def get_write_freq_select(self):
-        return self.write_freq_select
-
-    def set_write_freq_select(self, write_freq_select):
-        self.write_freq_select = write_freq_select
-        self._write_freq_select_callback(self.write_freq_select)
-        self.set_write_freq_select_var("freq_"+str(self.write_freq_select) if self.channel_or_subband==0 else self.subband3_pos)
-
     def get_subband4_offset(self):
         return self.subband4_offset
 
@@ -877,17 +781,12 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.subband4_offset = subband4_offset
         self.set_subband4_pos(int((self.subband4_offset-(-self.xlate_rate/2))/self.bin_size))
 
-    def get_subband3_pos(self):
-        return self.subband3_pos
+    def get_subband3_offset(self):
+        return self.subband3_offset
 
-    def set_subband3_pos(self, subband3_pos):
-        self.subband3_pos = subband3_pos
-        self.set_subband_3((-self.xlate_rate/2)+self.subband3_pos*self.bin_size)
-        self.set_write_freq_select_var("freq_"+str(self.write_freq_select) if self.channel_or_subband==0 else self.subband3_pos)
-        self.blocks_vector_source_x_0_0_0_0_0.set_data([-1000]*(self.subband3_pos+self.half_subband-self.pass_band_bins)+[2000]+[-1000]*(self.fft_len-self.subband3_pos-self.half_subband-1+self.pass_band_bins), [])
-        self.blocks_vector_source_x_0_1_0_0_0.set_data([-1000]*(self.subband3_pos-self.half_subband+self.pass_band_bins)+[2000]+[-1000]*(self.fft_len-self.subband3_pos+self.half_subband-1-self.pass_band_bins), [])
-        self.blocks_vector_source_x_0_2_0_0.set_data([-1000]*(self.subband3_pos-1)+[2000]+[-1000]*(self.half_band*2-self.subband3_pos), [])
-        self.xmlrpc_client_0_2.set_subband3_pos(self.subband3_pos)
+    def set_subband3_offset(self, subband3_offset):
+        self.subband3_offset = subband3_offset
+        self.set_subband3_pos(int((self.subband3_offset-(-self.xlate_rate/2))/self.bin_size))
 
     def get_subband2_offset(self):
         return self.subband2_offset
@@ -917,39 +816,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.dec0 = dec0
         self.set_dec0_rate(self.xlate_rate/self.dec0)
 
-    def get_channel_or_subband(self):
-        return self.channel_or_subband
-
-    def set_channel_or_subband(self, channel_or_subband):
-        self.channel_or_subband = channel_or_subband
-        self._channel_or_subband_callback(self.channel_or_subband)
-        self.set_conf_section("subband" if self.channel_or_subband == 1 else "channel")
-        self.set_write_freq_select_var("freq_"+str(self.write_freq_select) if self.channel_or_subband==0 else self.subband3_pos)
-
-    def get_write_subband_select(self):
-        return self.write_subband_select
-
-    def set_write_subband_select(self, write_subband_select):
-        self.write_subband_select = write_subband_select
-        self.set_subband_write("subband_"+str(self.write_subband_select))
-        self.set_subband_write_1("subband_"+str(self.write_subband_select))
-        self.set_subband_write_2("subband_"+str(self.write_subband_select))
-        self.set_subband_write_3("subband_"+str(self.write_subband_select))
-        self.set_subband_write_4("subband_"+str(self.write_subband_select))
-        self._write_subband_select_callback(self.write_subband_select)
-
-    def get_write_freq_select_var(self):
-        return self.write_freq_select_var
-
-    def set_write_freq_select_var(self, write_freq_select_var):
-        self.write_freq_select_var = write_freq_select_var
-        self._variable_config_0_config = configparser.ConfigParser()
-        self._variable_config_0_config.read('/tmp/cband_hunter_config.conf')
-        if not self._variable_config_0_config.has_section(self.conf_section):
-        	self._variable_config_0_config.add_section(self.conf_section)
-        self._variable_config_0_config.set(self.conf_section, self.write_freq_select_var, str(self.freq_write))
-        self._variable_config_0_config.write(open('/tmp/cband_hunter_config.conf', 'w'))
-
     def get_subband4_pos(self):
         return self.subband4_pos
 
@@ -961,12 +827,22 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.blocks_vector_source_x_0_2_0_0_0.set_data([-1000]*(self.subband4_pos-1)+[2000]+[-1000]*(self.half_band*2-self.subband4_pos), [])
         self.xmlrpc_client_0_3.set_subband4_pos(self.subband4_pos)
 
+    def get_subband3_pos(self):
+        return self.subband3_pos
+
+    def set_subband3_pos(self, subband3_pos):
+        self.subband3_pos = subband3_pos
+        self.set_subband_3((-self.xlate_rate/2)+self.subband3_pos*self.bin_size)
+        self.blocks_vector_source_x_0_0_0_0_0.set_data([-1000]*(self.subband3_pos+self.half_subband-self.pass_band_bins)+[2000]+[-1000]*(self.fft_len-self.subband3_pos-self.half_subband-1+self.pass_band_bins), [])
+        self.blocks_vector_source_x_0_1_0_0_0.set_data([-1000]*(self.subband3_pos-self.half_subband+self.pass_band_bins)+[2000]+[-1000]*(self.fft_len-self.subband3_pos+self.half_subband-1-self.pass_band_bins), [])
+        self.blocks_vector_source_x_0_2_0_0.set_data([-1000]*(self.subband3_pos-1)+[2000]+[-1000]*(self.half_band*2-self.subband3_pos), [])
+        self.xmlrpc_client_0_2.set_subband3_pos(self.subband3_pos)
+
     def get_subband2_pos(self):
         return self.subband2_pos
 
     def set_subband2_pos(self, subband2_pos):
         self.subband2_pos = subband2_pos
-        self.set_subband2_pos_val((-self.xlate_rate/2)+self.subband2_pos*self.bin_size)
         self.set_subband_2((-self.xlate_rate/2)+self.subband2_pos*self.bin_size)
         self.blocks_vector_source_x_0_0_0_0.set_data([-1000]*(self.subband2_pos+self.half_subband-self.pass_band_bins)+[2000]+[-1000]*(self.fft_len-self.subband2_pos-self.half_subband-1+self.pass_band_bins), [])
         self.blocks_vector_source_x_0_1_0_0.set_data([-1000]*(self.subband2_pos-self.half_subband+self.pass_band_bins)+[2000]+[-1000]*(self.fft_len-self.subband2_pos+self.half_subband-1-self.pass_band_bins), [])
@@ -1007,18 +883,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.sub_wtf3.set_frequency_range(0, self.dec0_rate)
         self.sub_wtf4.set_frequency_range(0, self.dec0_rate)
 
-    def get_conf_section(self):
-        return self.conf_section
-
-    def set_conf_section(self, conf_section):
-        self.conf_section = conf_section
-        self._variable_config_0_config = configparser.ConfigParser()
-        self._variable_config_0_config.read('/tmp/cband_hunter_config.conf')
-        if not self._variable_config_0_config.has_section(self.conf_section):
-        	self._variable_config_0_config.add_section(self.conf_section)
-        self._variable_config_0_config.set(self.conf_section, self.write_freq_select_var, str(self.freq_write))
-        self._variable_config_0_config.write(open('/tmp/cband_hunter_config.conf', 'w'))
-
     def get_waterfall_min(self):
         return self.waterfall_min
 
@@ -1042,42 +906,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self.sub_wtf2.set_intensity_range(self.waterfall_min, self.waterfall_max)
         self.sub_wtf3.set_intensity_range(self.waterfall_min, self.waterfall_max)
         self.sub_wtf4.set_intensity_range(self.waterfall_min, self.waterfall_max)
-
-    def get_variable_config_0(self):
-        return self.variable_config_0
-
-    def set_variable_config_0(self, variable_config_0):
-        self.variable_config_0 = variable_config_0
-
-    def get_subband_write_4(self):
-        return self.subband_write_4
-
-    def set_subband_write_4(self, subband_write_4):
-        self.subband_write_4 = subband_write_4
-
-    def get_subband_write_3(self):
-        return self.subband_write_3
-
-    def set_subband_write_3(self, subband_write_3):
-        self.subband_write_3 = subband_write_3
-
-    def get_subband_write_2(self):
-        return self.subband_write_2
-
-    def set_subband_write_2(self, subband_write_2):
-        self.subband_write_2 = subband_write_2
-
-    def get_subband_write_1(self):
-        return self.subband_write_1
-
-    def set_subband_write_1(self, subband_write_1):
-        self.subband_write_1 = subband_write_1
-
-    def get_subband_write(self):
-        return self.subband_write
-
-    def set_subband_write(self, subband_write):
-        self.subband_write = subband_write
 
     def get_subband_4(self):
         return self.subband_4
@@ -1144,12 +972,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
         self._subband0_offset_config.write(open('/tmp/cband_hunter_config.conf', 'w'))
         Qt.QMetaObject.invokeMethod(self._subband_0_label, "setText", Qt.Q_ARG("QString", str(self._subband_0_formatter(self.subband_0))))
 
-    def get_subband2_pos_val(self):
-        return self.subband2_pos_val
-
-    def set_subband2_pos_val(self, subband2_pos_val):
-        self.subband2_pos_val = subband2_pos_val
-
     def get_subband(self):
         return self.subband
 
@@ -1206,12 +1028,6 @@ class JAERO_ZMQ_CBAND_Hunter_GUI(gr.top_block, Qt.QWidget):
 
     def set_freq_write(self, freq_write):
         self.freq_write = freq_write
-        self._variable_config_0_config = configparser.ConfigParser()
-        self._variable_config_0_config.read('/tmp/cband_hunter_config.conf')
-        if not self._variable_config_0_config.has_section(self.conf_section):
-        	self._variable_config_0_config.add_section(self.conf_section)
-        self._variable_config_0_config.set(self.conf_section, self.write_freq_select_var, str(self.freq_write))
-        self._variable_config_0_config.write(open('/tmp/cband_hunter_config.conf', 'w'))
 
     def get_freq(self):
         return self.freq

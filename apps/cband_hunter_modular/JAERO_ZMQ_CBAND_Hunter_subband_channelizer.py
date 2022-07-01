@@ -35,7 +35,7 @@ import math
 
 class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
 
-    def __init__(self, port_start='6001', samp_rate=2.16e6, wtf_port_start='7001', zmq_port=5001):
+    def __init__(self, port_start='6001', samp_rate=2.16e6, wtf_port_start='7001', xmlrpc_server_port=9001, zmq_port=5001):
         gr.top_block.__init__(self, "CBAND HUNTER CHANNELIZER", catch_exceptions=True)
 
         ##################################################
@@ -44,6 +44,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         self.port_start = port_start
         self.samp_rate = samp_rate
         self.wtf_port_start = wtf_port_start
+        self.xmlrpc_server_port = xmlrpc_server_port
         self.zmq_port = zmq_port
 
         ##################################################
@@ -99,7 +100,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         self.zeromq_pub_sink_0_0_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[9]), 100, True, -1, '')
         self.zeromq_pub_sink_0_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[1]), 100, True, -1, '')
         self.zeromq_pub_sink_0 = zeromq.pub_sink(gr.sizeof_gr_complex, 1, str("tcp://127.0.0.1:")+str(wtf_ports[0]), 100, True, -1, '')
-        self.xmlrpc_server_0 = SimpleXMLRPCServer(('localhost', 9001), allow_none=True)
+        self.xmlrpc_server_0 = SimpleXMLRPCServer(('localhost', xmlrpc_server_port), allow_none=True)
         self.xmlrpc_server_0.register_instance(self)
         self.xmlrpc_server_0_thread = threading.Thread(target=self.xmlrpc_server_0.serve_forever)
         self.xmlrpc_server_0_thread.daemon = True
@@ -216,6 +217,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
             50)
         self.pfb_channelizer_ccf_0.set_channel_map([i for i in range(int(round_up_chans/2),round_up_chans)]+[i for i in range(0,int(round_up_chans/2))])
         self.pfb_channelizer_ccf_0.declare_sample_delay(0)
+        self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, dec0_rate,True)
         self.blocks_probe_rate_0 = blocks.probe_rate(gr.sizeof_short*1, 500.0, 0.15)
         self.blocks_null_sink_0_2 = blocks.null_sink(gr.sizeof_gr_complex*1)
         self.blocks_null_sink_0_1_0 = blocks.null_sink(gr.sizeof_gr_complex*1)
@@ -247,6 +249,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         # Connections
         ##################################################
         self.msg_connect((self.blocks_probe_rate_0, 'rate'), (self.blocks_message_debug_1, 'print'))
+        self.connect((self.blocks_throttle_0, 0), (self.pfb_channelizer_ccf_0, 0))
         self.connect((self.pfb_channelizer_ccf_0, 0), (self.blocks_null_sink_0, 0))
         self.connect((self.pfb_channelizer_ccf_0, 1), (self.blocks_null_sink_0_0, 0))
         self.connect((self.pfb_channelizer_ccf_0, 3), (self.blocks_null_sink_0_0_0, 0))
@@ -301,7 +304,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         self.connect((self.pfb_out_to_jaero_zmq_0_3_0, 0), (self.JAERO_zmq_sink_0_4_0_0_0_0, 0))
         self.connect((self.pfb_out_to_jaero_zmq_0_3_0_0, 0), (self.JAERO_zmq_sink_0_4_0_0_0_0_0, 0))
         self.connect((self.pfb_out_to_jaero_zmq_0_4, 0), (self.JAERO_zmq_sink_0_4_1_0, 0))
-        self.connect((self.zeromq_sub_source_0, 0), (self.pfb_channelizer_ccf_0, 0))
+        self.connect((self.zeromq_sub_source_0, 0), (self.blocks_throttle_0, 0))
 
 
     def get_port_start(self):
@@ -326,6 +329,12 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
     def set_wtf_port_start(self, wtf_port_start):
         self.wtf_port_start = wtf_port_start
         self.set_wtf_ports([i for i in range(int(self.wtf_port_start),int(self.wtf_port_start)+15)])
+
+    def get_xmlrpc_server_port(self):
+        return self.xmlrpc_server_port
+
+    def set_xmlrpc_server_port(self, xmlrpc_server_port):
+        self.xmlrpc_server_port = xmlrpc_server_port
 
     def get_zmq_port(self):
         return self.zmq_port
@@ -412,6 +421,7 @@ class JAERO_ZMQ_CBAND_Hunter_subband_channelizer(gr.top_block):
         self.dec0_rate = dec0_rate
         self.set_pfb_out_rate(self.dec0_rate/self.pfb_dec)
         self.set_pfb_taps(firdes.low_pass(1.0, self.dec0_rate, ((self.usb_bw)/2)*.95, ((self.usb_bw)/2)*.05, window.WIN_HAMMING, 6.76))
+        self.blocks_throttle_0.set_sample_rate(self.dec0_rate)
 
     def get_rs_rate(self):
         return self.rs_rate
@@ -610,6 +620,9 @@ def argument_parser():
         "-W", "--wtf-port-start", dest="wtf_port_start", type=str, default='7001',
         help="Set GUI zmq port start [default=%(default)r]")
     parser.add_argument(
+        "-X", "--xmlrpc-server-port", dest="xmlrpc_server_port", type=intx, default=9001,
+        help="Set JAERO instance port start [default=%(default)r]")
+    parser.add_argument(
         "-P", "--zmq-port", dest="zmq_port", type=intx, default=5001,
         help="Set ZMQ Port [default=%(default)r]")
     return parser
@@ -618,7 +631,7 @@ def argument_parser():
 def main(top_block_cls=JAERO_ZMQ_CBAND_Hunter_subband_channelizer, options=None):
     if options is None:
         options = argument_parser().parse_args()
-    tb = top_block_cls(port_start=options.port_start, samp_rate=options.samp_rate, wtf_port_start=options.wtf_port_start, zmq_port=options.zmq_port)
+    tb = top_block_cls(port_start=options.port_start, samp_rate=options.samp_rate, wtf_port_start=options.wtf_port_start, xmlrpc_server_port=options.xmlrpc_server_port, zmq_port=options.zmq_port)
 
     def sig_handler(sig=None, frame=None):
         tb.stop()

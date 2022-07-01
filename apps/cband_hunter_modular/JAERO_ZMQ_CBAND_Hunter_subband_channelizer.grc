@@ -178,7 +178,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 156.0]
+    coordinate: [16, 164.0]
     rotation: 0
     state: enabled
 - name: freq_write
@@ -934,6 +934,25 @@ blocks:
     coordinate: [2232, 156.0]
     rotation: 0
     state: enabled
+- name: blocks_throttle_0
+  id: blocks_throttle
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: dec0_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 980.0]
+    rotation: 0
+    state: true
 - name: import_0
   id: import
   parameters:
@@ -2398,12 +2417,29 @@ blocks:
     addr: localhost
     alias: ''
     comment: ''
-    port: '9001'
+    port: xmlrpc_server_port
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [232, 212.0]
+    rotation: 0
+    state: true
+- name: xmlrpc_server_port
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: JAERO instance port start
+    short_id: X
+    type: intx
+    value: '9001'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 324.0]
     rotation: 0
     state: true
 - name: zeromq_pub_sink_0
@@ -2748,6 +2784,7 @@ blocks:
 
 connections:
 - [blocks_probe_rate_0, rate, blocks_message_debug_1, print]
+- [blocks_throttle_0, '0', pfb_channelizer_ccf_0, '0']
 - [pfb_channelizer_ccf_0, '0', blocks_null_sink_0, '0']
 - [pfb_channelizer_ccf_0, '0', pfbdec2_wtf_1, '0']
 - [pfb_channelizer_ccf_0, '1', blocks_null_sink_0_0, '0']
@@ -2818,7 +2855,7 @@ connections:
 - [pfb_out_to_jaero_zmq_0_3_0, '0', JAERO_zmq_sink_0_4_0_0_0_0, '0']
 - [pfb_out_to_jaero_zmq_0_3_0_0, '0', JAERO_zmq_sink_0_4_0_0_0_0_0, '0']
 - [pfb_out_to_jaero_zmq_0_4, '0', JAERO_zmq_sink_0_4_1_0, '0']
-- [zeromq_sub_source_0, '0', pfb_channelizer_ccf_0, '0']
+- [zeromq_sub_source_0, '0', blocks_throttle_0, '0']
 - [zeromq_sub_source_0, '0', sub_wtf4_0, '0']
 
 metadata:
