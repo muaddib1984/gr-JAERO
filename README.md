@@ -135,6 +135,12 @@ Pre-recorded I/Q file demod/decode of 600bps, 1200bps,10500bps channels has been
 Live demod/decode from live 600bps and 1200bps channels has been successful. 
 Continued effort will be focused on live demod/decode of 10500bps and 8400bps.
 Success stories and I/Q recordings of 8400bps are welcome.
+==**update APRIL 2022**==
+
+Overhauled my RF Frontend/USB Demodulator and added a C-Band Dish:
+600/1200/10500/8400 in L-Band AND 10500-burst in C-Band have been decoded successfully with gr-JAERO!!!
+Still on the hunt for 1200bps bursts, gotta catch 'em all!
+
 
 ==**update APRIL 2022**==
 Overhauled my RF Frontend/USB Demodulator and added a C-Band Dish:
