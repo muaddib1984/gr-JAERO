@@ -53,11 +53,13 @@ sudo ldconfig
 Once installed, open GNURadio and click navigate to the ```gr-JAERO/grc``` directory. Open the 
 Go to the [JAERO](https://github.com/jontio/JAERO) project for installation instructions for JAERO.
 
-##Contents
+## Contents
 The gr-JAERO module includes the following:
+ - Custom JAERO ZMQ PUB Sink block that sends 16-bit shorts to JAERO in a the ZMQ configuration that JAERO accepts. 
+
  - Upper Sideband Demodulator Heir block which emulates the same DSP 
 in the [VFO section of SDRReceiver](https://github.com/jeroenbeijer/SDRReceiver/blob/700bdfa6a5bd517f9a6b8e67cca5342d06622954/vfo.cpp#L300-L332)
- - Custom JAERO ZMQ PUB Sink block that sends 16-bit shorts to JAERO in a the ZMQ configuration that JAERO accepts. 
+
 The included ZMQ PUB Sink in GNURadio does not have a way to send separate message types. JAERO requires that the sample
 rate be sent along with every batch of 16-bit shorts it receives. This is to tell JAERO to automatically retune.
 
@@ -66,7 +68,9 @@ rate be sent along with every batch of 16-bit shorts it receives. This is to tel
    - USRP (UHD)
    - I/Q WAV File (SDR#)
    - I/Q .cfile/.fc32 (GNURadio)
- 
+
+- Highly optimized demodulator based on the Upper Sideband Demodulator from [GQRX](https://github.com/gqrx-sdr/gqrx). This version of the demod is intended for use with the [Stillsuit](https://github.com/muaddib1984/stillsuit) project which is a wrapper around the same SDR sources above. Each Stillsuit flowgraph outputs the I/Q stream from an SDR over a ZMQ socket. The ZMQ output from the Stillsuit source you choose will feed the "JAERO_stillsuit_demod.grc" flowgraph.
+
 ## Usage
 - Launch JAERO
   - in the JAERO settings menu, check the ZMQ Audio option and change set the address to 'tcp://127.0.0.1:6001'
@@ -126,7 +130,10 @@ Adjust Volume as necessary in the GNURadio flowgraph by moving the 'Audio Volume
 (you may see data in the 'SUs' console without the Volume light on, but it's good practice to have all lights green in JAERO)
 You should see data in the 'SUs' console and/or the ACARS console and also the 'Plane Log' window. 
 
+To use the highly optimized demodulator, you will first need the stillsuit project (link above). Choose the stillsuit flowgraph for your SDR (LimeSDR, RTLSDR, etc.), and start the flowgraph. Match the sample rate from your stillsuit flowgraph by editing the <code>sample_rate</code> variable in the <code>JAERO_stillsuit_demod.grc</code> flowgraph. will connect to your SDR and output the I/Q samples to ZMQ. The usage is the similar to the above, however there is no need to tune the LO.
+
 ## Testing/Verification
+
 Testing has been done with live SDR data streams and pre-recorded I/Q files.
 For Live testing a Nooelec L-Band Patch antenna with Nooelec Sawbird IO Filter/LNA was used.
 SNR of 6-10dB is ideal.
@@ -140,6 +147,11 @@ Overhauled my RF Frontend/USB Demodulator and added a C-Band Dish:
 600/1200/10500/8400 in L-Band AND 10500-burst in C-Band have been decoded successfully with gr-JAERO!!!
 Still on the hunt for 1200bps bursts, gotta catch 'em all!
 
+
+==**update APRIL 2022**==
+Overhauled my RF Frontend/USB Demodulator and added a C-Band Dish:
+600/1200/10500/8400 in L-Band AND 10500-burst in C-Band have been decoded successfully with gr-JAERO!!!
+Still on the hunt for 1200bps bursts, gotta catch 'em all!
 
 ## Credits
 I can't thank [Jontio](https://github.com/jontio) enough for his help figuring this out. 
