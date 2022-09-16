@@ -131,7 +131,9 @@ Adjust Volume as necessary in the GNURadio flowgraph by moving the 'Audio Volume
 You should see data in the 'SUs' console and/or the ACARS console and also the 'Plane Log' window. 
 
 To use the highly optimized demodulator, you will first need the stillsuit project (link above). Choose the stillsuit flowgraph for your SDR (LimeSDR, RTLSDR, etc.), and start the flowgraph. Match the sample rate from your stillsuit flowgraph by editing the <code>sample_rate</code> variable in the <code>JAERO_stillsuit_demod.grc</code> flowgraph. will connect to your SDR and output the I/Q samples to ZMQ. The usage is the similar to the above, however there is no need to tune the LO.
+The connection across the flowgraphs is shown below.
 ![](images/stillsuit_RTLSDR.png)
+![](images/stillsuit_ZMQ_to_optimized_USB.png)
 
 
 ## Testing/Verification
