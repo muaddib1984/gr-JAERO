@@ -8,7 +8,7 @@
 # Title: JAERO to ZMQ
 # Author: muaddib
 # Description: Upper SIdeband AM Demodulator with ZMQ Output to feed JAERO
-# GNU Radio version: v3.10.1.0-1-g23e41fa4
+# GNU Radio version: 3.10.3.0
 
 from packaging.version import Version as StrictVersion
 
@@ -141,7 +141,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
             self.tabs_grid_layout_0.setRowStretch(r, 1)
         for c in range(3, 4):
             self.tabs_grid_layout_0.setColumnStretch(c, 1)
-        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5000', 100, True, -1, '')
+        self.zeromq_sub_source_0 = zeromq.sub_source(gr.sizeof_gr_complex, 1, 'tcp://127.0.0.1:5000', 100, True, (-1), '')
         self.qtgui_freq_sink_x_0_0_1_0_1_0 = qtgui.freq_sink_f(
             2048, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
@@ -152,7 +152,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
             None # parent
         )
         self.qtgui_freq_sink_x_0_0_1_0_1_0.set_update_time(0.00001)
-        self.qtgui_freq_sink_x_0_0_1_0_1_0.set_y_axis(-140, 10)
+        self.qtgui_freq_sink_x_0_0_1_0_1_0.set_y_axis((-140), 10)
         self.qtgui_freq_sink_x_0_0_1_0_1_0.set_y_label('Relative Gain', 'dB')
         self.qtgui_freq_sink_x_0_0_1_0_1_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
         self.qtgui_freq_sink_x_0_0_1_0_1_0.enable_autoscale(False)
@@ -199,7 +199,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
             None # parent
         )
         self.qtgui_freq_sink_x_0_0_1_0_0.set_update_time(0.001)
-        self.qtgui_freq_sink_x_0_0_1_0_0.set_y_axis(-140, 10)
+        self.qtgui_freq_sink_x_0_0_1_0_0.set_y_axis((-140), 10)
         self.qtgui_freq_sink_x_0_0_1_0_0.set_y_label('Relative Gain', 'dB')
         self.qtgui_freq_sink_x_0_0_1_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
         self.qtgui_freq_sink_x_0_0_1_0_0.enable_autoscale(False)
@@ -246,7 +246,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
             None # parent
         )
         self.qtgui_freq_sink.set_update_time(0.1)
-        self.qtgui_freq_sink.set_y_axis(-140, 10)
+        self.qtgui_freq_sink.set_y_axis((-140), 10)
         self.qtgui_freq_sink.set_y_label('Relative Gain', 'dB')
         self.qtgui_freq_sink.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
         self.qtgui_freq_sink.enable_autoscale(False)
@@ -291,16 +291,14 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
             dec1,
             firdes.low_pass(
                 1.0,
-                samp_rate/dec0,
+                (samp_rate/dec0),
                 lpf,
-                (dec1_rate/2)*.1,
+                ((dec1_rate/2)*.1),
                 window.WIN_HAMMING,
                 6.76))
         self.freq_xlating_fir_filter_xxx_0 = filter.freq_xlating_fir_filter_ccc(dec0, taps, shift, samp_rate)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
-        self.blocks_probe_rate_0 = blocks.probe_rate(gr.sizeof_gr_complex*1, 500.0, 0.1)
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(audio_volume)
-        self.blocks_message_debug_0 = blocks.message_debug(True)
         self.blocks_float_to_short_0 = blocks.float_to_short(1, short_scaling)
         self.blocks_complex_to_real_0_0 = blocks.complex_to_real(1)
         self.blocks_complex_to_real_0 = blocks.complex_to_real(1)
@@ -310,7 +308,6 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_probe_rate_0, 'rate'), (self.blocks_message_debug_0, 'print'))
         self.connect((self.blocks_complex_to_real_0, 0), (self.blocks_multiply_const_vxx_0, 0))
         self.connect((self.blocks_complex_to_real_0_0, 0), (self.qtgui_freq_sink_x_0_0_1_0_0, 0))
         self.connect((self.blocks_float_to_short_0, 0), (self.JAERO_zmq_sink_0, 0))
@@ -321,7 +318,6 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
         self.connect((self.freq_xlating_fir_filter_xxx_0, 0), (self.low_pass_filter_0, 0))
         self.connect((self.low_pass_filter_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_complex_to_real_0, 0))
-        self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_probe_rate_0, 0))
         self.connect((self.zeromq_sub_source_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.zeromq_sub_source_0, 0), (self.qtgui_freq_sink, 0))
 
@@ -344,7 +340,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
         self.set_dec1_rate((self.samp_rate/self.dec0)/self.dec1)
         self.set_taps(firdes.complex_band_pass(1.0, self.samp_rate, (self.dec0_rate/2)*0.1, (self.dec0_rate/2)*0.9, (self.dec0_rate/2)*0.1, window.WIN_HAMMING, 6.76))
         self.blocks_throttle_0.set_sample_rate(self.samp_rate)
-        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, self.samp_rate/self.dec0, self.lpf, (self.dec1_rate/2)*.1, window.WIN_HAMMING, 6.76))
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, (self.samp_rate/self.dec0), self.lpf, ((self.dec1_rate/2)*.1), window.WIN_HAMMING, 6.76))
         self.qtgui_freq_sink.set_frequency_range(self.freq, self.samp_rate)
 
     def get_dec0(self):
@@ -354,7 +350,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
         self.dec0 = dec0
         self.set_dec0_rate(self.samp_rate/self.dec0)
         self.set_dec1_rate((self.samp_rate/self.dec0)/self.dec1)
-        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, self.samp_rate/self.dec0, self.lpf, (self.dec1_rate/2)*.1, window.WIN_HAMMING, 6.76))
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, (self.samp_rate/self.dec0), self.lpf, ((self.dec1_rate/2)*.1), window.WIN_HAMMING, 6.76))
 
     def get_dec0_rate(self):
         return self.dec0_rate
@@ -393,7 +389,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
         self.dec1_rate = dec1_rate
         self.set_rs_rate(((self.audio_rate)/self.dec1_rate)*self.dec1_rate)
         self.set_rs_ratio(self.audio_rate/self.dec1_rate)
-        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, self.samp_rate/self.dec0, self.lpf, (self.dec1_rate/2)*.1, window.WIN_HAMMING, 6.76))
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, (self.samp_rate/self.dec0), self.lpf, ((self.dec1_rate/2)*.1), window.WIN_HAMMING, 6.76))
 
     def get_audio_rate(self):
         return self.audio_rate
@@ -451,7 +447,7 @@ class JAERO_ZMQ_demod_to_zmq_dev(gr.top_block, Qt.QWidget):
 
     def set_lpf(self, lpf):
         self.lpf = lpf
-        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, self.samp_rate/self.dec0, self.lpf, (self.dec1_rate/2)*.1, window.WIN_HAMMING, 6.76))
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1.0, (self.samp_rate/self.dec0), self.lpf, ((self.dec1_rate/2)*.1), window.WIN_HAMMING, 6.76))
 
     def get_freq(self):
         return self.freq
